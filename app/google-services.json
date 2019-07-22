@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "702751011842",
+    "firebase_url": "https://tccbillgames.firebaseio.com",
+    "project_id": "tccbillgames",
+    "storage_bucket": "tccbillgames.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702751011842:android:3dd7d4d1f7b3fbee",
+        "android_client_info": {
+          "package_name": "com.bento.tcc_bill_games"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702751011842-a7bc1uvc9qr32toj9fras9b6kerdrnkd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeD5cmZS4HQHTdVVEFe1woP0LNh34zdL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702751011842-a7bc1uvc9qr32toj9fras9b6kerdrnkd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
