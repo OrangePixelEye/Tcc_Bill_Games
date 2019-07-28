@@ -14,4 +14,10 @@
     <string name="contacts">Contatos</string>
     <string name="logout">Logout</string>
 
+    <string-array name="Teste">
+        <item>Teste</item>
+        <item>aaaaa</item>
+        <item>aaaa</item>
+    </string-array>
+
 </resources>

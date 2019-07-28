@@ -1,6 +1,5 @@
 package com.bento.tcc_bill_games;
 
-//import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
