@@ -7,17 +7,30 @@
     <string name="login_password">Password</string>
     <string name="login_create_account">Create your account</string>
 
-    <!--register strings-->
+    <!--register strings and arrays-->
+    <string name="register_interest"> What is your area of interest</string>
     <string name="register">Register</string>
     <string name="register_name">Name</string>
     <string name="register_username">Username</string>
-    <string name="contacts">Contatos</string>
+    <string name="contacts">Contacts</string>
     <string name="logout">Logout</string>
+    <string-array name="games_array_areas">
+        <item>Programmer</item>
+        <item>Designer</item>
+        <item>Artist</item>
+        <item>Sound Master</item>
+    </string-array>
+    <string-array name="games_array_programmer">
+        <item>aa</item>
+    </string-array>
 
+
+    <!--Spinner test-->
     <string-array name="Teste">
         <item>Teste</item>
         <item>aaaaa</item>
         <item>aaaa</item>
     </string-array>
+
 
 </resources>

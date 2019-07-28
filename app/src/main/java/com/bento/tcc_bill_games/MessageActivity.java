@@ -21,7 +21,7 @@ public class MessageActivity extends AppCompatActivity {
 
     private void verifyAuthentication() {
         if(FirebaseAuth.getInstance().getUid() == null){
-            Intent intent = new Intent(MessageActivity.this, MainActivity.class);
+            Intent intent = new Intent(MessageActivity.this, LoginActivity.class);
 
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
 

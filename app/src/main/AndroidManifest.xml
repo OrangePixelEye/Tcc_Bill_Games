@@ -12,9 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
+        <activity android:name=".UserActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".ContactsActivity">
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MessageActivity"/>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MessageActivity" />
         </activity>
         <activity android:name=".MessageActivity">
             <intent-filter>
@@ -24,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".LoginActivity" />
     </application>
 
 </manifest>
