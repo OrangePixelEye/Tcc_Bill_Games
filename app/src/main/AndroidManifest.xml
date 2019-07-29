@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".UserActivity"></activity>
+        <activity android:name=".ProjectActivity"></activity>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".UserActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ContactsActivity">
             <meta-data

@@ -87,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
             try {
 
                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-               mImagePhoto.setImageDrawable(new BitmapDrawable(bitmap));
+               mImagePhoto.setImageDrawable(new BitmapDrawable(getResources(),bitmap));
                mImagePhoto.setAlpha(0);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
