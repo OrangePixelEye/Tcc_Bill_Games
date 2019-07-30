@@ -10,12 +10,16 @@
         android:id="@+id/img_user_profile"
         android:layout_width="45dp"
         android:layout_height="45dp"
+
+
+        app:civ_border_width="20dp"
+        android:src="@mipmap/user_icon_round"
+
         app:layout_constraintBottom_toBottomOf="@+id/btn_search"
         app:layout_constraintEnd_toEndOf="@+id/btn_search"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/btn_search"
         app:layout_constraintTop_toTopOf="@+id/btn_search"
-        android:background="@mipmap/user_icon_round"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -25,7 +29,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="71dp"
         android:layout_marginEnd="326dp"
-        android:background="@drawable/bg_button__img_rounded"
+        android:background="@mipmap/user_icon_round"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,8 +38,8 @@
         android:id="@+id/btn_user_profile"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:background="@drawable/bg_button__img_rounded"
         android:layout_marginTop="45dp"
+        android:background="@drawable/bg_button__img_rounded"
         app:layout_constraintEnd_toEndOf="@+id/img_user_profile"
         app:layout_constraintStart_toStartOf="@+id/img_user_profile"
         app:layout_constraintTop_toBottomOf="@+id/img_user_profile" />
@@ -54,7 +58,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_profile"
+        android:id="@+id/btn_projects"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginTop="45dp"
@@ -62,5 +66,29 @@
         app:layout_constraintEnd_toEndOf="@+id/btn_user_profile"
         app:layout_constraintStart_toStartOf="@+id/btn_user_profile"
         app:layout_constraintTop_toBottomOf="@+id/btn_user_profile" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="300dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/btn_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_search"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="65dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintStart_toEndOf="@+id/editText"
+        app:layout_constraintTop_toTopOf="@+id/editText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
