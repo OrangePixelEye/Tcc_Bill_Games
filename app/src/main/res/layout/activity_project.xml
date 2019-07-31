@@ -10,6 +10,8 @@
         android:id="@+id/btn_new_project"
         android:layout_width="59dp"
         android:layout_height="59dp"
-        tools:layout_editor_absoluteX="274dp"
-        tools:layout_editor_absoluteY="626dp" />
+        android:layout_marginStart="274dp"
+        android:layout_marginTop="626dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
