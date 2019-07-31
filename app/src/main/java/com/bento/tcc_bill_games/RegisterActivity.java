@@ -82,13 +82,15 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 0){
+            Log.i("Teste", "até aqui bl");
             mSelectedUri = data.getData();
             Bitmap bitmap = null;
             try {
 
                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-               mImagePhoto.setImageDrawable(new BitmapDrawable(bitmap));
-               mImagePhoto.setAlpha(0);
+               Log.i("Teste", "pegou a foto");
+               //mImagePhoto.setImageDrawable(new BitmapDrawable(bitmap));
+               //mImagePhoto.getBackground().setAlpha(0);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -138,15 +140,16 @@ public class RegisterActivity extends AppCompatActivity {
                         Log.i("Teste", uri.toString());
 
                         String uid = FirebaseAuth.getInstance().getUid();
-                        String t_username = Username.getText().toString();
-                        String t_profile_url = uri.toString();
-                        String t_name = Name.getText().toString();
+                        String username = Username.getText().toString();
+                        String profile_url = uri.toString();
+                        String name = Name.getText().toString();
 
-                        User user = new User(uid, t_username, t_profile_url, t_name);
+                        User user = new User(uid, username, profile_url, name);
 
                         FirebaseFirestore.getInstance().collection("users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
+                                Log.i("Teste", "registrou");
                                 Intent intent = new Intent(RegisterActivity.this, MessageActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);

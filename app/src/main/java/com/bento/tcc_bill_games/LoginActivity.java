@@ -28,16 +28,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password;
     private Button btn_login;
     private TextView register;
-    private Spinner teste;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //spinner teste
-        teste = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.Teste,R.layout.support_simple_spinner_dropdown_item);
-        teste.setAdapter(adapter);
 
         email = findViewById(R.id.edit_email_register);
         password = findViewById(R.id.edit_password_register);

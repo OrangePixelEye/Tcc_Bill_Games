@@ -32,5 +32,9 @@
         <item>aaaa</item>
     </string-array>
 
+    <string-array name="areas">
+
+    </string-array>
+
 
 </resources>
