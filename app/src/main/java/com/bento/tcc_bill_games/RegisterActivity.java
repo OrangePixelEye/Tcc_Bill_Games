@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -89,8 +90,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
                Log.i("Teste", "pegou a foto");
+               Picasso.get().load(mSelectedUri).into(mImagePhoto);
                //mImagePhoto.setImageDrawable(new BitmapDrawable(bitmap));
-               //mImagePhoto.getBackground().setAlpha(0);
+               mImagePhoto.getBackground().setAlpha(0);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -100,10 +102,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void CreateUser() {
-        String email = Email.getText().toString();
-        String password = Password.getText().toString();
-        String name = Name.getText().toString();
-        String username = Username.getText().toString();
+        final String email = Email.getText().toString();
+        final String password = Password.getText().toString();
+        final String name = Name.getText().toString();
+        final String username = Username.getText().toString();
 
         if(username.isEmpty() || username == null || name.isEmpty() || name == null || email.isEmpty() || email == null || password.isEmpty() || password == null){
             Toast.makeText(this, "O email e senha devem ser preenchidos", Toast.LENGTH_SHORT).show();
@@ -116,7 +118,21 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             Log.i("Teste", task.getResult().getUser().getUid());
-                            SaveUserInFirebase();
+                            FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()){
+                                        SaveUserInFirebase();
+                                    }
+
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.i("Teste", e.getMessage());
+                                }
+                            });
+
                         }
 
                 }
@@ -150,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.i("Teste", "registrou");
-                                Intent intent = new Intent(RegisterActivity.this, MessageActivity.class);
+                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             }

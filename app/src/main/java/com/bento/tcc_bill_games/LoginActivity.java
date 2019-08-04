@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             Log.i("Teste", task.getResult().getUser().getUid());
-                            Intent intent = new Intent(LoginActivity.this, MessageActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                         }

@@ -75,7 +75,7 @@ public class ContactsActivity extends AppCompatActivity {
 
         @Override
         public int getLayout() {
-            return 0;
+            return R.layout.item_user;
         }
     }
 
