@@ -91,8 +91,8 @@ public class RegisterActivity extends AppCompatActivity {
                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
                Log.i("Teste", "pegou a foto");
                Picasso.get().load(mSelectedUri).into(mImagePhoto);
-               //mImagePhoto.setImageDrawable(new BitmapDrawable(bitmap));
-               mImagePhoto.getBackground().setAlpha(0);
+               mImagePhoto.setImageDrawable(new BitmapDrawable(getResources(),bitmap));
+               //mImagePhoto.getBackground().mutate().setAlpha(0);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {

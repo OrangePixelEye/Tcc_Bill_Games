@@ -62,9 +62,9 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_user_profile" />
 
     <EditText
-        android:id="@+id/editText"
-        android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:id="@+id/SearchBar"
+        android:layout_width="264dp"
+        android:layout_height="43dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
@@ -75,12 +75,12 @@
         app:layout_constraintTop_toTopOf="@+id/btn_search" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="65dp"
-        android:layout_height="42dp"
+        android:id="@+id/btn_search_s"
+        android:layout_width="31dp"
+        android:layout_height="44dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
-        app:layout_constraintStart_toEndOf="@+id/editText"
-        app:layout_constraintTop_toTopOf="@+id/editText" />
+        app:layout_constraintBottom_toBottomOf="@+id/SearchBar"
+        app:layout_constraintStart_toEndOf="@+id/SearchBar"
+        app:layout_constraintTop_toTopOf="@+id/SearchBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

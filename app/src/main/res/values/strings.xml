@@ -14,22 +14,60 @@
     <string name="register_username">Username</string>
     <string name="contacts">Contacts</string>
     <string name="logout">Logout</string>
+    <string-array name="games_styles">
+        <item>RPG</item>
+        <item>Plataforma</item>
+        <item>Corrida</item>
+        <item>FPS</item>
+        <item>MOBA</item>
+        <item>MMORPG</item>
+        <item>Esporte</item>
+        <item>Simulacao</item>
+        <item>Estrategia</item>
+        <item>Tower Defense</item>
+        <item>Mundo Aberto</item>
+        <item>Aventura</item>
+        <item>Arcade</item>
+        <item>Luta</item>
+
+    </string-array>
+
     <string-array name="games_array_areas">
         <item>Programmer</item>
         <item>Designer</item>
         <item>Artist</item>
         <item>Sound Master</item>
+
     </string-array>
+
+    <string-array name="game_array_sound_master">
+        <item>Engenheiro de som</item>
+
+    </string-array>
+
+    <string-array name="game_array_artist">
+        <item>Animador</item>
+        <item>Roteirista</item>
+        <item>Concept Artist</item>
+
+    </string-array>
+
+    <string-array name="games_array_designer">
+        <item>Game Designer</item>
+        <item>Mobile</item>
+
+    </string-array>
+
     <string-array name="games_array_programmer">
-        <item>aa</item>
-    </string-array>
-
-
-    <!--Spinner test-->
-    <string-array name="Teste">
-        <item>Teste</item>
-        <item>aaaaa</item>
-        <item>aaaa</item>
+        <item>Level Designer</item>
+        <item>Servidor</item>
+        <item>Web</item>
+        <item>Tester</item>
+        <item>Mobile</item>
+        <item>Redes</item>
+        <item>2D</item>
+        <item>3D</item>
+        
     </string-array>
 
     <string-array name="areas">
