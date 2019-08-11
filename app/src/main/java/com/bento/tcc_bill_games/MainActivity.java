@@ -1,13 +1,23 @@
 package com.bento.tcc_bill_games;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity {
     //UI variables
@@ -15,11 +25,34 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_user;
     private Button btn_projects;
     private Button btn_logout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        verifyAuthentication();
 
+        final User[] users = {null};
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final FirebaseUser FUuser = FirebaseAuth.getInstance().getCurrentUser();
+        final String current = FUuser.getUid();//getting unique user id
+
+        db.collection("users")
+                .whereEqualTo("uId",current)//looks for the corresponding value with the field
+                // in the database
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                users[0] = document.toObject(User.class);
+                            }
+                        }
+                    }
+                });
+        final User user = users[0];
         btn_search = findViewById(R.id.btn_search);
         btn_user = findViewById(R.id.btn_user_profile);
         btn_projects = findViewById(R.id.btn_projects);
@@ -37,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                intent.putExtra("user", (Serializable) user);
                 startActivity(intent);
             }
         });
@@ -45,13 +79,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProjectActivity.class);
+
                 startActivity(intent);
             }
         });
 
-
-
-        verifyAuthentication();
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,13 +94,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void verifyAuthentication() {
-        if(FirebaseAuth.getInstance().getUid() == null){
+        if (FirebaseAuth.getInstance().getUid() == null) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
         }
     }
+
 }
