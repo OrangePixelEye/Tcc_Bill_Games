@@ -69,10 +69,10 @@
         <item>3D</item>
         
     </string-array>
-
-    <string-array name="areas">
-
-    </string-array>
+    <!--Erros e informações para a textView do registro-->
+    <string name="error_register_loading">Calma tá carregando mano</string>
+    <string name="error_register_img_put">Por favor coloque uma a imagem de perfil</string>
+    <string name="error_register_add_user">Erro ao adicionar usuario</string>
 
 
 </resources>

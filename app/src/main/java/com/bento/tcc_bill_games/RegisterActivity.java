@@ -1,6 +1,7 @@
 package com.bento.tcc_bill_games;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,6 +46,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Button selected_photo;
     private Uri mSelectedUri;
     private ImageView mImagePhoto;
+    private TextView txtError;
+    final Resources res = getResources();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
         btn_register = findViewById(R.id.btn_register);
         selected_photo = findViewById(R.id.btn_selected_photo);
         mImagePhoto = findViewById(R.id.img_photo);
+        txtError = findViewById(R.id.txtErrorRegister);
 
         selected_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CreateUser();
+                txtError.setText(res.getString(R.string.error_register_loading));
             }
         });
     }
@@ -91,7 +97,9 @@ public class RegisterActivity extends AppCompatActivity {
                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
                Log.i("Teste", "pegou a foto");
                Picasso.get().load(mSelectedUri).into(mImagePhoto);
+
                mImagePhoto.setImageDrawable(new BitmapDrawable(getResources(),bitmap));
+               selected_photo.setVisibility(View.INVISIBLE);
                //mImagePhoto.getBackground().mutate().setAlpha(0);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -173,7 +181,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-
+                                txtError.setText(res.getString(R.string.error_register_add_user));
                             }
                         });
                     }
@@ -183,6 +191,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.i("Teste", e.getMessage(),e );
+                txtError.setText(res.getString(R.string.error_register_img_put));
             }
         });
     }
