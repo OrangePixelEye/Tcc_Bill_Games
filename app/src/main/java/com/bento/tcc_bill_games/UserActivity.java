@@ -106,11 +106,13 @@ public class UserActivity extends AppCompatActivity {
     private void configureScreen() {
         Bundle extras = getIntent().getExtras();
         User user = null;
-        if(extras != null && extras.containsKey("user") ) {
-            user = (User) extras.getSerializable("user");
-            edtxtNameUser.setText(user.getName());
-            edtxtUserameUser.setText(user.getUsername());
-            Picasso.get().load(user.getProfile_url()).into(imgUser);
+        if(extras!= null && extras.containsKey("user") ) {
+            user = (User) extras.get("user");
+            if (null != user.getUuid()) {
+                edtxtNameUser.setText(user.getName());
+                edtxtUserameUser.setText(user.getUsername());
+                Picasso.get().load(user.getProfile_url()).into(imgUser);
+            }
         }else{
             Log.i("Teste","erro ao mandar a classe usuario");
             Intent intent = new Intent(UserActivity.this, MainActivity.class);

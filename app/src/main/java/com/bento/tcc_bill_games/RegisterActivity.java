@@ -47,13 +47,14 @@ public class RegisterActivity extends AppCompatActivity {
     private Uri mSelectedUri;
     private ImageView mImagePhoto;
     private TextView txtError;
-    final Resources res = getResources();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        final Resources res = getResources();
         Email = findViewById(R.id.edit_email_register);
         Username = findViewById(R.id.edittext_username_register);
         Name = findViewById(R.id.edittext_name_register);
@@ -181,6 +182,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                final Resources res = getResources();
                                 txtError.setText(res.getString(R.string.error_register_add_user));
                             }
                         });
@@ -191,6 +193,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.i("Teste", e.getMessage(),e );
+                final Resources res = getResources();
                 txtError.setText(res.getString(R.string.error_register_img_put));
             }
         });
