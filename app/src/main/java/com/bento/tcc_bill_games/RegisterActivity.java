@@ -171,7 +171,16 @@ public class RegisterActivity extends AppCompatActivity {
 
                         User user = new User(uid, username, profile_url, name);
 
-                        FirebaseFirestore.getInstance().collection("users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        FirebaseFirestore.getInstance().collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.i("Teste","registou");
+                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        });
+                        /* add(user)
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.i("Teste", "registrou");
@@ -186,6 +195,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 txtError.setText(res.getString(R.string.error_register_add_user));
                             }
                         });
+                        */
                     }
                 });
             }
