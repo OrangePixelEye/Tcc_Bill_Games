@@ -1,6 +1,5 @@
 package com.bento.tcc_bill_games;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,16 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     //UI variables
@@ -28,17 +23,18 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_logout;
     User user;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        verifyAuthentication();
+        LoginUser();
 
         btn_search = findViewById(R.id.btn_search);
         btn_user = findViewById(R.id.btn_user_profile);
         btn_projects = findViewById(R.id.btn_projects);
         btn_logout = findViewById(R.id.btn_logout);
-        user = LoginUser();
+
 
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                intent.putExtra("user", (Serializable) user);
+                intent.putExtra("user",  user);
                 startActivity(intent);
             }
         });
@@ -61,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProjectActivity.class);
-
+                intent.putExtra("user",  user);
                 startActivity(intent);
             }
         });
@@ -82,36 +78,27 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-    private User LoginUser(){
-        final User[] u = new User[1];
-        FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-             @Override
-             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                 u[0] = documentSnapshot.toObject(User.class);
-             }
 
-         });
-        return u[0];
-    }
-    /*private void UserLog() {
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document();
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    User user = Objects.requireNonNull(task.getResult()).toObject(User.class);
+    private void LoginUser(){
 
-
-                } else {
-                    String excep = Objects.requireNonNull(task.getException()).getMessage();
-                    Log.d("Teste", "Error reading user data " + excep);
-
+        String doc = FirebaseAuth.getInstance().getUid();
+        if(doc != null) {
+            FirebaseFirestore.getInstance().collection("users").document(doc).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot != null) {
+                        user = documentSnapshot.toObject(User.class);
+                    }
+                    else{
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
                 }
-            }
+            });
+        }else{
+            verifyAuthentication();
 
-        });
-    }*/
-
-
-
+        }
+    }
 }

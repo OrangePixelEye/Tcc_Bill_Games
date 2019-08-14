@@ -12,10 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".ProjectActivity"></activity>
+        <activity android:name=".AddProjectActivity"></activity>
+        <activity android:name=".ProjectActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".UserActivity" />
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,8 +28,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MessageActivity" />
         </activity>
-        <activity android:name=".MessageActivity">
-        </activity>
+        <activity android:name=".MessageActivity"></activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
     </application>

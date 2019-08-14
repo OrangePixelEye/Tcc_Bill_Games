@@ -44,7 +44,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/bg_button_rounded"
-        android:text="@string/login_button"
+        android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_password_register" />
@@ -80,12 +80,11 @@
     <Button
         android:id="@+id/btn_selected_photo"
         android:layout_width="150dp"
-        android:background="@drawable/bg_button__img_rounded"
         android:layout_height="150dp"
         android:layout_marginStart="130dp"
         android:layout_marginTop="43dp"
         android:layout_marginEnd="131dp"
-        android:text="Button"
+        android:background="@drawable/bg_button__img_rounded"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -103,10 +102,11 @@
         android:id="@+id/txtErrorRegister"
         android:layout_width="152dp"
         android:layout_height="15dp"
+        android:layout_marginBottom="8dp"
         android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/img_photo"
         app:layout_constraintEnd_toEndOf="@+id/img_photo"
-        app:layout_constraintStart_toStartOf="@+id/img_photo"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintStart_toStartOf="@+id/img_photo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

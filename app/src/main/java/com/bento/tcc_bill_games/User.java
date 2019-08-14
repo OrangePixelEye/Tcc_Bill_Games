@@ -1,6 +1,8 @@
 package com.bento.tcc_bill_games;
 
-public class User{
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String uuid;
     private String username;
     private String profile_url;

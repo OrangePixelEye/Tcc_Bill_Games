@@ -36,9 +36,11 @@ public class UserActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
+        //UI references
         txtAreaUser = findViewById(R.id.txtAreaUser);
         txtTelefoneUser = findViewById(R.id.txtTelefoneUser);
         txtCidadeUser = findViewById(R.id.txtCidadeUser);
@@ -49,9 +51,11 @@ public class UserActivity extends AppCompatActivity {
         btn_change_photo = findViewById(R.id.btn_change_photo);
         update_profile = findViewById(R.id.btn_update_profile);
         update_profile.setVisibility(View.GONE);
+        btn_change_photo.setVisibility(View.INVISIBLE);
 
         configureScreen();
 
+        //Button events
         btn_change_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,8 +96,6 @@ public class UserActivity extends AppCompatActivity {
                 Log.i("Teste", "pegou a foto");
                 Picasso.get().load(mSelectedUri).into(imgUser);
                 imgUser.setImageDrawable(new BitmapDrawable(getResources(),bitmap));
-                //mImagePhoto.getBackground().mutate().setAlpha(0);
-
                 update_profile.setVisibility(View.VISIBLE);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -105,14 +107,14 @@ public class UserActivity extends AppCompatActivity {
 
     private void configureScreen() {
         Bundle extras = getIntent().getExtras();
-        User user = null;
+        User user;
         if(extras!= null && extras.containsKey("user") ) {
             user = (User) extras.get("user");
-            if (null != user.getUuid()) {
-                edtxtNameUser.setText(user.getName());
-                edtxtUserameUser.setText(user.getUsername());
-                Picasso.get().load(user.getProfile_url()).into(imgUser);
-            }
+
+            edtxtNameUser.setText(user.getName());
+            edtxtUserameUser.setText(user.getUsername());
+            Picasso.get().load(user.getProfile_url()).into(imgUser);
+
         }else{
             Log.i("Teste","erro ao mandar a classe usuario");
             Intent intent = new Intent(UserActivity.this, MainActivity.class);

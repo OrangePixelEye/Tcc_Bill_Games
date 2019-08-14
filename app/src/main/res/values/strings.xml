@@ -14,6 +14,11 @@
     <string name="register_username">Username</string>
     <string name="contacts">Contacts</string>
     <string name="logout">Logout</string>
+
+    <string name="add_projects_Description">Description</string>
+    <string name="add_projects_add">Add project</string>
+
+    <!--styles for projects-->
     <string-array name="games_styles">
         <item>RPG</item>
         <item>Plataforma</item>
@@ -67,7 +72,7 @@
         <item>Redes</item>
         <item>2D</item>
         <item>3D</item>
-        
+
     </string-array>
     <!--Erros e informações para a textView do registro-->
     <string name="error_register_loading">Calma tá carregando mano</string>

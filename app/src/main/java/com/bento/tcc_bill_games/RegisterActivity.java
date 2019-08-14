@@ -78,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
                 txtError.setText(res.getString(R.string.error_register_loading));
             }
         });
+
     }
 
     private void selectPhoto() {
@@ -98,10 +99,8 @@ public class RegisterActivity extends AppCompatActivity {
                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
                Log.i("Teste", "pegou a foto");
                Picasso.get().load(mSelectedUri).into(mImagePhoto);
-
                mImagePhoto.setImageDrawable(new BitmapDrawable(getResources(),bitmap));
-               selected_photo.setVisibility(View.INVISIBLE);
-               //mImagePhoto.getBackground().mutate().setAlpha(0);
+               selected_photo.getBackground().setAlpha(0);;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -180,22 +179,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
                         });
-                        /* add(user)
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.i("Teste", "registrou");
-                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                final Resources res = getResources();
-                                txtError.setText(res.getString(R.string.error_register_add_user));
-                            }
-                        });
-                        */
+
                     }
                 });
             }
