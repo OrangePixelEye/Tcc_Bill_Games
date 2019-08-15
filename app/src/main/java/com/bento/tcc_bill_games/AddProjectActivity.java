@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -11,37 +12,52 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.UUID;
 
-public class AddProjectActivity extends AppCompatActivity {
+public class AddProjectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Button addImage;
     private ImageView projImage;
     private Button createProj;
-    private EditText name;
-    private EditText description;
+    private EditText Name;
+    private EditText Description;
     private Uri mSelectedUri;
+    private Spinner sp;
+    private TextView txt;
+    private String GameCategory;
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_project);
+        LoginUser();
 
+        final Resources res = getResources();
         projImage = findViewById(R.id.imgAddProject);
         addImage = findViewById(R.id.btn_add_project_image);
         createProj = findViewById(R.id.btn_create_project);
-        name = findViewById(R.id.etAddProjectName);
-        description = findViewById(R.id.etProjectsDescription);
-
+        Name = findViewById(R.id.etAddProjectName);
+        Description = findViewById(R.id.etProjectsDescription);
+        sp = findViewById(R.id.sp_add_projects);
+        txt = findViewById(R.id.txtErrorAddProject);
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,32 +65,44 @@ public class AddProjectActivity extends AppCompatActivity {
             }
         });
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.games_styles, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        sp.setAdapter(adapter);
+        sp.setOnItemSelectedListener(this);
+
+
+        createProj.setVisibility(View.INVISIBLE);
         createProj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createProject();
+                txt.setText(res.getString(R.string.error_register_loading));
             }
         });
 
     }
 
     private void createProject() {
-       /* String uuid = FirebaseAuth.getInstance().getUid();
-        String name = name.getText().toString();
-        String description = description.getText().toString();
+        String project_id = UUID.randomUUID().toString();
+        final String uuid = FirebaseAuth.getInstance().getUid();
+        final String name = Name.getText().toString();
+        String description = Description.getText().toString();
+        String gd = GameCategory;
 
 
-        User user = new User(uid, username, profile_url, name);
+        Project proj = new Project(project_id, uuid, name, description, gd);
 
-        FirebaseFirestore.getInstance().collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+        FirebaseFirestore.getInstance().collection("projects").add(proj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(DocumentReference documentReference) {
                 Log.i("Teste","registou");
-                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                Intent intent = new Intent(AddProjectActivity.this, ProjectActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
-        })*/
+        });
     }
 
     private void selectPhoto() {
@@ -103,5 +131,34 @@ public class AddProjectActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+    private void LoginUser() {
+        String doc = FirebaseAuth.getInstance().getUid();
+        if (doc != null) {
+            FirebaseFirestore.getInstance().collection("users").document(doc).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot != null) {
+                        user = documentSnapshot.toObject(User.class);
+                    } else {
+                        Intent intent = new Intent(AddProjectActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+       GameCategory = parent.getItemAtPosition(position).toString();
+       createProj.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        final Resources r = getResources();
+        txt.setText(r.getString(R.string.add_projects_add_category));
     }
 }

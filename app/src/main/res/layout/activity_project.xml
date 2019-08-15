@@ -10,15 +10,15 @@
         android:id="@+id/btn_new_project"
         android:layout_width="59dp"
         android:layout_height="59dp"
-        android:layout_marginStart="274dp"
-        android:layout_marginTop="626dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_projects"
+        app:layout_constraintEnd_toEndOf="@+id/rv_projects" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_projects"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="399dp"
+        android:layout_height="696dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

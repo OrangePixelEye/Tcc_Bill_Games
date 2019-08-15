@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,10 +34,13 @@ public class ProjectActivity extends AppCompatActivity {
 
     private Button btn_new_project;
     private GroupAdapter adapter;
+    User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
+        LoginUser();
 
         //UI references
         btn_new_project = findViewById(R.id.btn_new_project);
@@ -42,19 +48,40 @@ public class ProjectActivity extends AppCompatActivity {
         adapter = new GroupAdapter();
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        /*fetchProjects();
+        /*fetchProjects();*/
 
         btn_new_project.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(ProjectActivity.this, AddProjectActivity.class);
+                intent.putExtra("user", user);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
-        });*/
-
-
+        });
 
 
     }
+
+    private void LoginUser() {
+
+        String doc = FirebaseAuth.getInstance().getUid();
+        if (doc != null) {
+            FirebaseFirestore.getInstance().collection("users").document(doc).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot != null) {
+                        user = documentSnapshot.toObject(User.class);
+                    } else {
+                        Intent intent = new Intent(ProjectActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+    }
+}
 
     /*private void fetchProjects() {
         FirebaseFirestore.getInstance().collection("projects").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -97,4 +124,4 @@ public class ProjectActivity extends AppCompatActivity {
         }
     }
     }*/
-}
+

@@ -17,6 +17,7 @@
 
     <string name="add_projects_Description">Description</string>
     <string name="add_projects_add">Add project</string>
+    <string name="add_projects_add_category">Selecione uma categoria</string>
 
     <!--styles for projects-->
     <string-array name="games_styles">
