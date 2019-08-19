@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,10 @@ public class RegisterActivity extends AppCompatActivity {
     private Uri mSelectedUri;
     private ImageView mImagePhoto;
     private TextView txtError;
+    private Spinner sp_area;
+    private Spinner sp_line;
+    private EditText City;
+    private EditText PhoneNumber;
 
 
     @Override
@@ -63,6 +70,26 @@ public class RegisterActivity extends AppCompatActivity {
         selected_photo = findViewById(R.id.btn_selected_photo);
         mImagePhoto = findViewById(R.id.img_photo);
         txtError = findViewById(R.id.txtErrorRegister);
+        City = findViewById(R.id.edtxtRegisterNameCity);
+        PhoneNumber = findViewById(R.id.edtxtRegisterPhoneNumber);
+        sp_area = findViewById(R.id.sp_register_area);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.games_array_areas, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        sp_area.setAdapter(adapter);
+        sp_area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         selected_photo.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -31,7 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.UUID;
 
-public class AddProjectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AddProjectActivity extends AppCompatActivity {
 
     private Button addImage;
     private ImageView projImage;
@@ -41,7 +41,7 @@ public class AddProjectActivity extends AppCompatActivity implements AdapterView
     private Uri mSelectedUri;
     private Spinner sp;
     private TextView txt;
-    private String GameCategory;
+    private int a;
     User user;
 
     @Override
@@ -70,7 +70,21 @@ public class AddProjectActivity extends AppCompatActivity implements AdapterView
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         sp.setAdapter(adapter);
-        sp.setOnItemSelectedListener(this);
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                createProj.setVisibility(View.VISIBLE);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                final Resources r = getResources();
+                txt.setText(r.getString(R.string.add_projects_add_category));
+
+            }
+        });
 
 
         createProj.setVisibility(View.INVISIBLE);
@@ -86,13 +100,13 @@ public class AddProjectActivity extends AppCompatActivity implements AdapterView
 
     private void createProject() {
         String project_id = UUID.randomUUID().toString();
-        final String uuid = FirebaseAuth.getInstance().getUid();
-        final String name = Name.getText().toString();
+        String uuid = FirebaseAuth.getInstance().getUid();
+        String name = Name.getText().toString();
         String description = Description.getText().toString();
-        String gd = GameCategory;
+        String gd = String.valueOf(sp.getSelectedItemPosition());
 
-
-        Project proj = new Project(project_id, uuid, name, description, gd);
+        Project proj = new Project(gd, project_id, uuid, name, description);
+        Log.i("Teste",gd);
 
         FirebaseFirestore.getInstance().collection("projects").add(proj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
@@ -150,15 +164,5 @@ public class AddProjectActivity extends AppCompatActivity implements AdapterView
         }
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-       GameCategory = parent.getItemAtPosition(position).toString();
-       createProj.setVisibility(View.VISIBLE);
-    }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        final Resources r = getResources();
-        txt.setText(r.getString(R.string.add_projects_add_category));
-    }
 }

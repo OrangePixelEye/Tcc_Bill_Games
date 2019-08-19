@@ -7,6 +7,18 @@ public class User implements Serializable {
     private String username;
     private String profile_url;
     private String name;
+    private String Phone;
+    private String City;
+
+    public String getPhone() {
+        return Phone;
+    }
+
+    public String getCity() {
+        return City;
+    }
+
+
 
     public User(){
 

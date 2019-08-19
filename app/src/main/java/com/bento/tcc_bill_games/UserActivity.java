@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -110,11 +111,15 @@ public class UserActivity extends AppCompatActivity {
         User user;
         if(extras!= null && extras.containsKey("user") ) {
             user = (User) extras.get("user");
+            if(user.getName().equals("")) {
+                Intent intent = new Intent(UserActivity.this, MainActivity.class);
+                startActivity(intent);
+            }else{
+                edtxtNameUser.setText(user.getName());
+                edtxtUserameUser.setText(user.getUsername());
+                Picasso.get().load(user.getProfile_url()).into(imgUser);
 
-            edtxtNameUser.setText(user.getName());
-            edtxtUserameUser.setText(user.getUsername());
-            Picasso.get().load(user.getProfile_url()).into(imgUser);
-
+            }
         }else{
             Log.i("Teste","erro ao mandar a classe usuario");
             Intent intent = new Intent(UserActivity.this, MainActivity.class);
