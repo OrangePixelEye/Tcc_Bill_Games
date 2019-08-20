@@ -54,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Spinner sp_line;
     private EditText City;
     private EditText PhoneNumber;
-
+    private Boolean isSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +73,12 @@ public class RegisterActivity extends AppCompatActivity {
         City = findViewById(R.id.edtxtRegisterNameCity);
         PhoneNumber = findViewById(R.id.edtxtRegisterPhoneNumber);
         sp_area = findViewById(R.id.sp_register_area);
+        sp_line = findViewById(R.id.sp_register_line);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.games_array_areas, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
 
         sp_area.setAdapter(adapter);
         sp_area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -90,6 +92,38 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+        sp_line.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        switch (sp_area.getSelectedItemPosition()){
+            case 0:
+                sp_line.setVisibility(View.INVISIBLE);
+                break;
+            case 1:
+                ArrayAdapter<CharSequence> adapterP = ArrayAdapter.createFromResource(this,
+                        R.array.games_array_programmer, android.R.layout.simple_spinner_item);
+                adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                sp_line.setAdapter(adapterP);
+                sp_line.setVisibility(View.VISIBLE);
+
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
 
         selected_photo.setOnClickListener(new View.OnClickListener() {
             @Override
