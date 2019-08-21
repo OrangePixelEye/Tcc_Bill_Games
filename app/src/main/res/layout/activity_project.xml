@@ -17,10 +17,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_projects"
-        android:layout_width="399dp"
-        android:layout_height="696dp"
+        android:layout_width="402dp"
+        android:layout_height="648dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_project_back"
+        android:layout_width="62dp"
+        android:layout_height="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

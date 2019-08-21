@@ -34,6 +34,7 @@ public class ProjectActivity extends AppCompatActivity {
 
     private Button btn_new_project;
     private GroupAdapter adapter;
+    private Button back;
     User user;
 
     @Override
@@ -41,7 +42,7 @@ public class ProjectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
         LoginUser();
-
+        back = findViewById(R.id.btn_project_back);
         //UI references
         btn_new_project = findViewById(R.id.btn_new_project);
         RecyclerView rv = findViewById(R.id.rv_projects);
@@ -56,6 +57,14 @@ public class ProjectActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProjectActivity.this, AddProjectActivity.class);
                 intent.putExtra("user", user);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProjectActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });

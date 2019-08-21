@@ -41,6 +41,7 @@ public class AddProjectActivity extends AppCompatActivity {
     private Uri mSelectedUri;
     private Spinner sp;
     private TextView txt;
+    private Button back;
     private int a;
     User user;
 
@@ -64,6 +65,7 @@ public class AddProjectActivity extends AppCompatActivity {
                 selectPhoto();
             }
         });
+        back = findViewById(R.id.btn_add_project_back);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.games_styles, android.R.layout.simple_spinner_item);
@@ -93,6 +95,15 @@ public class AddProjectActivity extends AppCompatActivity {
             public void onClick(View v) {
                 createProject();
                 txt.setText(res.getString(R.string.error_register_loading));
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddProjectActivity.this, ProjectActivity.class);
+                intent.putExtra("user",  user);
+                startActivity(intent);
             }
         });
 
