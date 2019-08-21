@@ -34,6 +34,7 @@ public class UserActivity extends AppCompatActivity {
     private EditText edtxtUserameUser;
     private Button btn_change_photo;
     private Button update_profile;
+    private Button back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,15 @@ public class UserActivity extends AppCompatActivity {
         update_profile = findViewById(R.id.btn_update_profile);
         update_profile.setVisibility(View.GONE);
         btn_change_photo.setVisibility(View.INVISIBLE);
+        back = findViewById(R.id.btn_useractivity_back);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         configureScreen();
 

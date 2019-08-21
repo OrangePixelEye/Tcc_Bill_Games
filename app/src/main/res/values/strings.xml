@@ -47,12 +47,12 @@
 
     </string-array>
 
-    <string-array name="game_array_sound_master">
+    <string-array name="games_array_sound_master">
         <item>Engenheiro de som</item>
 
     </string-array>
 
-    <string-array name="game_array_artist">
+    <string-array name="games_array_artist">
         <item>Animador</item>
         <item>Roteirista</item>
         <item>Concept Artist</item>

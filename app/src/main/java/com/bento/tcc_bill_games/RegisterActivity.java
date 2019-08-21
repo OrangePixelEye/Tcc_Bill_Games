@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -61,6 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+
         final Resources res = getResources();
         Email = findViewById(R.id.edit_email_register);
         Username = findViewById(R.id.edittext_username_register);
@@ -75,16 +77,63 @@ public class RegisterActivity extends AppCompatActivity {
         sp_area = findViewById(R.id.sp_register_area);
         sp_line = findViewById(R.id.sp_register_line);
 
+
+        //Arrays adapters
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.games_array_areas, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterP = ArrayAdapter.createFromResource(this,
+                R.array.games_array_programmer, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterD = ArrayAdapter.createFromResource(this,
+                R.array.games_array_designer, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterA = ArrayAdapter.createFromResource(this,
+                R.array.games_array_artist, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterSA = ArrayAdapter.createFromResource(this,
+                R.array.games_array_sound_master, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
 
 
         sp_area.setAdapter(adapter);
         sp_area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        sp_line.setVisibility(View.GONE);
+                        break;
+                    case 1:
 
+                        sp_line.setAdapter(adapterP);
+                        sp_line.setVisibility(View.VISIBLE);
+
+                        break;
+                    case 2:
+
+                        sp_line.setAdapter(adapterD);
+                        sp_line.setVisibility(View.VISIBLE);
+
+                        break;
+                    case 3:
+
+                        sp_line.setAdapter(adapterA);
+                        sp_line.setVisibility(View.VISIBLE);
+
+                        break;
+                    case 4:
+
+                        sp_line.setAdapter(adapterSA);
+                        sp_line.setVisibility(View.VISIBLE);
+
+                        break;
+                }
             }
 
             @Override
@@ -104,26 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        switch (sp_area.getSelectedItemPosition()){
-            case 0:
-                sp_line.setVisibility(View.INVISIBLE);
-                break;
-            case 1:
-                ArrayAdapter<CharSequence> adapterP = ArrayAdapter.createFromResource(this,
-                        R.array.games_array_programmer, android.R.layout.simple_spinner_item);
-                adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-                sp_line.setAdapter(adapterP);
-                sp_line.setVisibility(View.VISIBLE);
-
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-        }
 
         selected_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,6 +199,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void ChangeSpinner(){}
 
     private void CreateUser() {
         final String email = Email.getText().toString();
