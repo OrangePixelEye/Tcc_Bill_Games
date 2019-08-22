@@ -200,7 +200,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void ChangeSpinner(){}
 
     private void CreateUser() {
         final String email = Email.getText().toString();

@@ -24,8 +24,10 @@ import com.squareup.picasso.Picasso;
 import com.xwray.groupie.Group;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
+import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -46,10 +48,17 @@ public class ProjectActivity extends AppCompatActivity {
         //UI references
         btn_new_project = findViewById(R.id.btn_new_project);
         RecyclerView rv = findViewById(R.id.rv_projects);
+
         adapter = new GroupAdapter();
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        /*fetchProjects();*/
+        rv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        fetchProjects();
 
         btn_new_project.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,9 +99,9 @@ public class ProjectActivity extends AppCompatActivity {
             });
         }
     }
-}
 
-    /*private void fetchProjects() {
+
+    private void fetchProjects() {
         FirebaseFirestore.getInstance().collection("projects").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -102,28 +111,44 @@ public class ProjectActivity extends AppCompatActivity {
                 }
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                 for(DocumentSnapshot doc:docs){
-                    Project project = doc.toObject(Project.class);
-                    //Log.i("Teste", project.getName());
+                    final Project project = doc.toObject(Project.class);
+
+                    /*adapter.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(@NonNull Item item, @NonNull View view) {
+
+                            Log.i("Teste",project.getName());
+                            /*Intent intent = new Intent(ProjectActivity.this, ProjectDescribedActivity.class);
+                            intent.putExtra("project", project);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    });*/
 
                     adapter.add(new ProjectItem(project));
+
+
                 }
             }
         });
     }
 
-    private class ProjectItem extends Item<ViewHolder> {
-        private Project project;
+    private class ProjectItem extends Item<ViewHolder>{
+        private Project p;
 
         public ProjectItem(Project p) {
-            this.project = p;
+            this.p = p;
         }
+
+
 
         @Override
         public void bind(@NonNull ViewHolder viewHolder, int position) {
-            /*TextView txt_username = viewHolder.itemView.findViewById(R.id.textView);
-            ImageView imgPhoto = viewHolder.itemView.findViewById(R.id.imageView);
+            TextView txt_username = viewHolder.itemView.findViewById(R.id.txtItemProjectName);
+            TextView txt_description = viewHolder.itemView.findViewById(R.id.txtItemProjectDescription);
             txt_username.setText(p.getName());
-            Picasso.get().load(p.getProfile_url()).into(imgPhoto);
+            txt_description.setText(p.getDescription());
+
 
         }
 
@@ -131,6 +156,7 @@ public class ProjectActivity extends AppCompatActivity {
         public int getLayout() {
             return R.layout.item_project;
         }
+
     }
-    }*/
+}
 

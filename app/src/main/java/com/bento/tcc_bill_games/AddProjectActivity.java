@@ -1,5 +1,6 @@
 package com.bento.tcc_bill_games;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,11 +21,15 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
@@ -110,22 +115,41 @@ public class AddProjectActivity extends AppCompatActivity {
     }
 
     private void createProject() {
-        String project_id = UUID.randomUUID().toString();
-        String uuid = FirebaseAuth.getInstance().getUid();
-        String name = Name.getText().toString();
-        String description = Description.getText().toString();
-        String gd = String.valueOf(sp.getSelectedItemPosition());
-
-        Project proj = new Project(gd, project_id, uuid, name, description);
-        Log.i("Teste",gd);
-
-        FirebaseFirestore.getInstance().collection("projects").add(proj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        String filename = UUID.randomUUID().toString();
+        final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + filename);
+        ref.putFile(mSelectedUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Log.i("Teste","registou");
-                Intent intent = new Intent(AddProjectActivity.this, ProjectActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Log.i("Teste", uri.toString());
+                        String project_id = UUID.randomUUID().toString();
+                        String uuid = FirebaseAuth.getInstance().getUid();
+                        String name = Name.getText().toString();
+                        String description = Description.getText().toString();
+                        String gd = String.valueOf(sp.getSelectedItemPosition());
+                        String profile_url = uri.toString();
+
+                        Project proj = new Project(gd, project_id, uuid, name, description, profile_url);
+                        Log.i("Teste", gd);
+
+                        FirebaseFirestore.getInstance().collection("projects").add(proj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.i("Teste", "registou");
+                                Intent intent = new Intent(AddProjectActivity.this, ProjectActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i("Teste", e.getMessage(), e);
             }
         });
     }

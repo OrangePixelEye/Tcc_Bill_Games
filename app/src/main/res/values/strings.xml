@@ -20,6 +20,12 @@
     <string name="add_projects_add_category">Selecione uma categoria</string>
 
     <!--styles for projects-->
+    <string name="error_register_loading">Calma tá carregando mano</string>
+
+    <string name="error_register_img_put">Por favor coloque uma a imagem de perfil</string>
+
+    <string name="error_register_add_user">Erro ao adicionar usuario</string>
+
     <string-array name="games_styles">
         <item>RPG</item>
         <item>Plataforma</item>
@@ -51,20 +57,18 @@
         <item>Engenheiro de som</item>
 
     </string-array>
-
+    <!--Erros e informações para a textView do registro-->
     <string-array name="games_array_artist">
         <item>Animador</item>
         <item>Roteirista</item>
         <item>Concept Artist</item>
 
     </string-array>
-
     <string-array name="games_array_designer">
         <item>Game Designer</item>
         <item>Mobile</item>
 
     </string-array>
-
     <string-array name="games_array_programmer">
         <item>Level Designer</item>
         <item>Servidor</item>
@@ -76,10 +80,6 @@
         <item>3D</item>
 
     </string-array>
-    <!--Erros e informações para a textView do registro-->
-    <string name="error_register_loading">Calma tá carregando mano</string>
-    <string name="error_register_img_put">Por favor coloque uma a imagem de perfil</string>
-    <string name="error_register_add_user">Erro ao adicionar usuario</string>
 
 
 </resources>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProjectDescribedActivity">
+
+    <ImageView
+        android:id="@+id/imgProjectDescribed"
+        android:layout_width="293dp"
+        android:layout_height="292dp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/btn_project_described_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtProjectDescribedName"
+        android:layout_width="146dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="44dp"
+        app:layout_constraintStart_toStartOf="@+id/imgProjectDescribed"
+        app:layout_constraintTop_toBottomOf="@+id/imgProjectDescribed" />
+
+    <TextView
+        android:id="@+id/txtProjectDescribedCategory"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txtProjectDescribedName"
+        app:layout_constraintStart_toEndOf="@+id/txtProjectDescribedName"
+        app:layout_constraintTop_toTopOf="@+id/txtProjectDescribedName" />
+
+    <TextView
+        android:id="@+id/txtProjectDescribedDescription"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        app:layout_constraintEnd_toEndOf="@+id/txtProjectDescribedCategory"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="@+id/txtProjectDescribedName"
+        app:layout_constraintTop_toBottomOf="@+id/txtProjectDescribedName" />
+</androidx.constraintlayout.widget.ConstraintLayout>
