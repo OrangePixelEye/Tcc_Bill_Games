@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,14 +19,11 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.squareup.picasso.Picasso;
-import com.xwray.groupie.Group;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -52,12 +48,20 @@ public class ProjectActivity extends AppCompatActivity {
         adapter = new GroupAdapter();
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull Item item, @NonNull View view) {
+                ProjectItem projItem = (ProjectItem) item;
+
+                Intent intent = new Intent(ProjectActivity.this, ProjectDescribedActivity.class);
+
+                intent.putExtra("projectSend", projItem.p);
+
+                startActivity(intent);
             }
         });
+
         fetchProjects();
 
         btn_new_project.setOnClickListener(new View.OnClickListener() {
@@ -112,19 +116,6 @@ public class ProjectActivity extends AppCompatActivity {
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                 for(DocumentSnapshot doc:docs){
                     final Project project = doc.toObject(Project.class);
-
-                    /*adapter.setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(@NonNull Item item, @NonNull View view) {
-
-                            Log.i("Teste",project.getName());
-                            /*Intent intent = new Intent(ProjectActivity.this, ProjectDescribedActivity.class);
-                            intent.putExtra("project", project);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                    });*/
-
                     adapter.add(new ProjectItem(project));
 
 
@@ -140,8 +131,6 @@ public class ProjectActivity extends AppCompatActivity {
             this.p = p;
         }
 
-
-
         @Override
         public void bind(@NonNull ViewHolder viewHolder, int position) {
             TextView txt_username = viewHolder.itemView.findViewById(R.id.txtItemProjectName);
@@ -150,7 +139,9 @@ public class ProjectActivity extends AppCompatActivity {
             txt_description.setText(p.getDescription());
 
 
+
         }
+
 
         @Override
         public int getLayout() {

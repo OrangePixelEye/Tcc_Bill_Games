@@ -29,19 +29,19 @@ public class ProjectDescribedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_described);
 
+        imgProj = findViewById(R.id.imgProjectDescribed);
+        txtName = findViewById(R.id.txtProjectDescribedName);
+        txtDescription = findViewById(R.id.txtProjectDescribedDescription);
+        txtCategory = findViewById(R.id.txtProjectDescribedCategory);
+        back = findViewById(R.id.btn_project_described_back);
+
         LoginUser();
         configureScreen();
-
-        imgProj.findViewById(R.id.imgProjectDescribed);
-        txtName.findViewById(R.id.txtProjectDescribedName);
-        txtDescription.findViewById(R.id.txtProjectDescribedDescription);
-        txtCategory.findViewById(R.id.txtProjectDescribedCategory);
-        back.findViewById(R.id.btn_project_described_back);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProjectDescribedActivity.this, AddProjectActivity.class);
+                Intent intent = new Intent(ProjectDescribedActivity.this, ProjectActivity.class);
                 intent.putExtra("user", user);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -71,8 +71,9 @@ public class ProjectDescribedActivity extends AppCompatActivity {
     private void configureScreen() {
         Bundle extras = getIntent().getExtras();
         Project project;
-        if(extras!= null && extras.containsKey("project") ) {
-            project = (Project) extras.get("project");
+        if(extras!= null && extras.containsKey("projectSend") ) {
+            project = (Project) extras.get("projectSend");
+
             if(project.getName().equals("")) {
                 Intent intent = new Intent(ProjectDescribedActivity.this, MainActivity.class);
                 startActivity(intent);

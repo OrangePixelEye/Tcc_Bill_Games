@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".ProjectDescribedActivity"></activity>
+        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".ProjectDescribedActivity" />
         <activity android:name=".AddProjectActivity" />
         <activity android:name=".ProjectActivity" />
         <activity android:name=".ProfileActivity" />
