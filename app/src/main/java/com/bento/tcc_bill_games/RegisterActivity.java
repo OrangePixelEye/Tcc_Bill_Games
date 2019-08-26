@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,7 +42,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class RegisterActivity extends AppCompatActivity {
-
+    //UI variables
     private EditText Username;
     private EditText Name;
     private EditText Email;
@@ -50,10 +51,8 @@ public class RegisterActivity extends AppCompatActivity {
     private Button selected_photo;
     private Uri mSelectedUri;
     private ImageView mImagePhoto;
-    private TextView txtError;
     private Spinner sp_area;
     private Spinner sp_line;
-    private EditText City;
     private EditText PhoneNumber;
     private Boolean isSelected;
 
@@ -62,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-
+        //find view by id
         final Resources res = getResources();
         Email = findViewById(R.id.edit_email_register);
         Username = findViewById(R.id.edittext_username_register);
@@ -71,8 +70,6 @@ public class RegisterActivity extends AppCompatActivity {
         btn_register = findViewById(R.id.btn_register);
         selected_photo = findViewById(R.id.btn_selected_photo);
         mImagePhoto = findViewById(R.id.img_photo);
-        txtError = findViewById(R.id.txtErrorRegister);
-        City = findViewById(R.id.edtxtRegisterNameCity);
         PhoneNumber = findViewById(R.id.edtxtRegisterPhoneNumber);
         sp_area = findViewById(R.id.sp_register_area);
         sp_line = findViewById(R.id.sp_register_line);
@@ -100,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
         adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
-
+        //arrays for area selection
         sp_area.setAdapter(adapter);
         sp_area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -154,19 +151,18 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-
+        //event for photo selection
         selected_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectPhoto();
             }
         });
-
+        //event for user's creation
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CreateUser();
-                txtError.setText(res.getString(R.string.error_register_loading));
             }
         });
 
@@ -174,7 +170,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void selectPhoto() {
         Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/");
+        intent.setType("image/"); //this is the data type of the intent return
         startActivityForResult(intent,0);
     }
 
@@ -182,20 +178,23 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 0){
-            Log.i("Teste", "até aqui bl");
+
             mSelectedUri = data.getData();
             Bitmap bitmap = null;
             try {
 
                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-               Log.i("Teste", "pegou a foto");
+
                Picasso.get().load(mSelectedUri).into(mImagePhoto);
                mImagePhoto.setImageDrawable(new BitmapDrawable(getResources(),bitmap));
                selected_photo.getBackground().setAlpha(0);;
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -229,7 +228,7 @@ public class RegisterActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.i("Teste", e.getMessage());
+                                    Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
 
@@ -239,7 +238,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i("Teste", e.getMessage());
+                        Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -265,7 +264,7 @@ public class RegisterActivity extends AppCompatActivity {
                         FirebaseFirestore.getInstance().collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.i("Teste","registou");
+
                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
@@ -278,9 +277,7 @@ public class RegisterActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.i("Teste", e.getMessage(),e );
-                final Resources res = getResources();
-                txtError.setText(res.getString(R.string.error_register_img_put));
+                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
