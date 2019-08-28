@@ -54,7 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
     private Spinner sp_area;
     private Spinner sp_line;
     private EditText PhoneNumber;
-    private Boolean isSelected;
+
+    private Boolean isSelected = false;
+    private Boolean is_ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         //find view by id
-        final Resources res = getResources();
         Email = findViewById(R.id.edit_email_register);
         Username = findViewById(R.id.edittext_username_register);
         Name = findViewById(R.id.edittext_name_register);
@@ -74,6 +75,15 @@ public class RegisterActivity extends AppCompatActivity {
         sp_area = findViewById(R.id.sp_register_area);
         sp_line = findViewById(R.id.sp_register_line);
 
+        //btn will appear when all the form is ok
+        btn_register.setVisibility(View.GONE);
+
+        btn_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateUser();
+            }
+        });
 
         //Arrays adapters
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -99,6 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //arrays for area selection
         sp_area.setAdapter(adapter);
+        //spinner for each area
         sp_area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -138,10 +149,26 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+        //spinner for each line of each area
         sp_line.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                isSelected = true;
 
+                final String Vemail = Email.getText().toString();
+                final String Vpassword = Password.getText().toString();
+                final String Vname = Name.getText().toString();
+                final String Vusername = Username.getText().toString();
+                //user's data verification
+                if(Vusername.isEmpty() || Vname.isEmpty() || Vemail.isEmpty()|| Vpassword.isEmpty()){
+                    is_ok = false;
+                }else {
+                    is_ok = true;
+                }
+
+                if(is_ok){
+                    btn_register.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -151,6 +178,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
+
         //event for photo selection
         selected_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,13 +186,9 @@ public class RegisterActivity extends AppCompatActivity {
                 selectPhoto();
             }
         });
-        //event for user's creation
-        btn_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateUser();
-            }
-        });
+
+
+
 
     }
 
@@ -172,45 +196,53 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/"); //this is the data type of the intent return
         startActivityForResult(intent,0);
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 0){
-
-            mSelectedUri = data.getData();
-            Bitmap bitmap = null;
-            try {
-
-               bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-
-               Picasso.get().load(mSelectedUri).into(mImagePhoto);
-               mImagePhoto.setImageDrawable(new BitmapDrawable(getResources(),bitmap));
-               selected_photo.getBackground().setAlpha(0);;
-            } catch (FileNotFoundException e) {
-                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-
-
-            } catch (IOException e) {
-                //e.printStackTrace();
-                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        if(requestCode == 0) {
+            //this is the case that user selected a photo
+            if (resultCode == RESULT_OK) {
+                mSelectedUri = data.getData();
+                Bitmap bitmap = null;
+                try {
+                    //reference to the user's image in a bitmap
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
+                    //load the selected user's picture and put it in a image view
+                    Picasso.get().load(mSelectedUri).into(mImagePhoto);
+                    mImagePhoto.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
+                    //set the button an invisible aspect
+                    selected_photo.getBackground().setAlpha(0);
+                   //catch for errors
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            //this is the case for a canceled activity result
+            if(resultCode == RESULT_CANCELED){
+                recreate();
             }
         }
     }
 
 
     private void CreateUser() {
+        //get the edit text content
         final String email = Email.getText().toString();
         final String password = Password.getText().toString();
         final String name = Name.getText().toString();
         final String username = Username.getText().toString();
 
+        //user's data verification
         if(username.isEmpty() || username == null || name.isEmpty() || name == null || email.isEmpty() || email == null || password.isEmpty() || password == null){
             Toast.makeText(this, "O email e senha devem ser preenchidos", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        //if everything is ok the it create a login email
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -244,7 +276,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void SaveUserInFirebase() {
+        //create a name for the user's image
         String filename = UUID.randomUUID().toString();
+        //a reference to the firestore database
         final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + filename);
         ref.putFile(mSelectedUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -252,15 +286,15 @@ public class RegisterActivity extends AppCompatActivity {
                 ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Log.i("Teste", uri.toString());
 
+                        //user's information that are going to the user's class
                         String uid = FirebaseAuth.getInstance().getUid();
                         String username = Username.getText().toString();
                         String profile_url = uri.toString();
                         String name = Name.getText().toString();
 
                         User user = new User(uid, username, profile_url, name);
-
+                        //create a doc reference with the firebaseAuth's id
                         FirebaseFirestore.getInstance().collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -269,6 +303,11 @@ public class RegisterActivity extends AppCompatActivity {
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         });
 
                     }
@@ -276,6 +315,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
+            //failure for the photo's upload
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
