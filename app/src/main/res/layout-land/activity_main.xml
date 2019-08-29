@@ -12,8 +12,6 @@
         android:layout_height="41dp"
         app:layout_constraintBottom_toBottomOf="@+id/SearchBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/SearchBar"
         app:layout_constraintTop_toTopOf="@+id/SearchBar"
         app:layout_constraintVertical_bias="1.0" />
 
@@ -31,7 +29,7 @@
         android:id="@+id/btn_user_profile"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="20dp"
         android:background="@null"
         app:layout_constraintStart_toStartOf="@+id/SearchBar"
         app:layout_constraintTop_toBottomOf="@+id/SearchBar" />
@@ -48,16 +46,26 @@
 
     <EditText
         android:id="@+id/SearchBar"
-        android:layout_width="263dp"
-        android:layout_height="41dp"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="32dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toStartOf="@+id/btn_search"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_main_activity"
+        android:layout_width="727dp"
+        android:layout_height="310dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/btn_logout"
+        app:layout_constraintTop_toBottomOf="@+id/SearchBar"
+        app:layout_constraintVertical_bias="1.0" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_user_profile"
@@ -66,16 +74,8 @@
         android:background="@mipmap/user_icon_round"
         app:civ_border_width="20dp"
         app:layout_constraintEnd_toEndOf="@+id/btn_user_profile"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/btn_user_profile"
         app:layout_constraintTop_toTopOf="@+id/btn_user_profile" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_main_activity"
-        android:layout_width="296dp"
-        android:layout_height="711dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_logout"
-        app:layout_constraintTop_toBottomOf="@+id/SearchBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
