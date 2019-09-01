@@ -11,7 +11,7 @@ public class Project implements Serializable {
     private String project_url;
 
     public String getProject_url() {
-        return project_url;
+        return this.project_url;
     }
 
 
@@ -44,6 +44,6 @@ public class Project implements Serializable {
     }
 
     public String getGd() {
-        return gd;
+        return this.gd;
     }
 }

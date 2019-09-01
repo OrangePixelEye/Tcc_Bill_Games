@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -137,7 +138,6 @@ public class AddProjectActivity extends AppCompatActivity {
                         FirebaseFirestore.getInstance().collection("projects").add(proj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Log.i("Teste", "registou");
                                 Intent intent = new Intent(AddProjectActivity.this, ProjectActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
@@ -149,7 +149,7 @@ public class AddProjectActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.i("Teste", e.getMessage(), e);
+                Toast.makeText(AddProjectActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();;
             }
         });
     }
@@ -164,21 +164,25 @@ public class AddProjectActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 0){
-            Log.i("Teste", "até aqui bl");
-            mSelectedUri = data.getData();
-            Bitmap bitmap = null;
-            try {
+            if (resultCode == RESULT_OK) {
 
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-                Log.i("Teste", "pegou a foto");
-                Picasso.get().load(mSelectedUri).into(projImage);
-                projImage.setImageDrawable(new BitmapDrawable(getResources(),bitmap));
-                addImage.getBackground().setAlpha(0);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                mSelectedUri = data.getData();
+                Bitmap bitmap = null;
+                try {
+
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
+                    Picasso.get().load(mSelectedUri).into(projImage);
+                    projImage.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
+                    addImage.getBackground().setAlpha(0);
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(AddProjectActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    Toast.makeText(AddProjectActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
+        }
+        if(resultCode == RESULT_CANCELED){
+            recreate();
         }
     }
     private void LoginUser() {

@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ProjectDescribedActivity">
 
-    <ImageView
-        android:id="@+id/imgProjectDescribed"
-        android:layout_width="293dp"
-        android:layout_height="292dp"
-        android:layout_marginTop="64dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
-
     <Button
         android:id="@+id/btn_project_described_back"
         android:layout_width="wrap_content"
@@ -23,12 +13,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imgProjectDescribed"
+        android:layout_width="293dp"
+        android:layout_height="292dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_project_described_back"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <TextView
         android:id="@+id/txtProjectDescribedName"
         android:layout_width="146dp"
         android:layout_height="23dp"
-        android:layout_marginTop="44dp"
-        app:layout_constraintStart_toStartOf="@+id/imgProjectDescribed"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/txtProjectDescribedCategory"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgProjectDescribed" />
 
     <TextView
@@ -37,16 +38,29 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         app:layout_constraintBottom_toBottomOf="@+id/txtProjectDescribedName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/txtProjectDescribedName"
         app:layout_constraintTop_toTopOf="@+id/txtProjectDescribedName" />
 
     <TextView
         android:id="@+id/txtProjectDescribedDescription"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
+        android:layout_width="171dp"
+        android:layout_height="21dp"
         android:layout_marginTop="36dp"
         app:layout_constraintEnd_toEndOf="@+id/txtProjectDescribedCategory"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="@+id/txtProjectDescribedName"
         app:layout_constraintTop_toBottomOf="@+id/txtProjectDescribedName" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,85 +1,70 @@
 <resources>
-    <string name="app_name">Tcc_Bill_Games</string>
-
+    <string name="app_name">Bill Games</string>
     <!--login strings-->
-    <string name="login_button">Login</string>
-    <string name="login_email">Email</string>
-    <string name="login_password">Password</string>
-    <string name="login_create_account">Create your account</string>
-
+        <string name="login_button">Login</string>
+        <string name="login_email">Email</string>
+        <string name="login_password">Password</string>
+        <string name="login_create_account">Create your account</string>
     <!--register strings and arrays-->
-    <string name="register_interest"> What is your area of interest</string>
-    <string name="register">Register</string>
-    <string name="register_name">Name</string>
-    <string name="register_username">Username</string>
-    <string name="contacts">Contacts</string>
-    <string name="logout">Logout</string>
-
+        <string name="register_interest"> What is your area of interest</string>
+        <string name="register">Register</string>
+        <string name="register_name">Name</string>
+        <string name="register_username">Username</string>
+        <string name="contacts">Contacts</string>
+        <string name="logout">Logout</string>
     <string name="add_projects_Description">Description</string>
     <string name="add_projects_add">Add project</string>
     <string name="add_projects_add_category">Selecione uma categoria</string>
-
+    <!--Errors-->
+        <string name="error_register_loading">Calma tá carregando mano</string>
+        <string name="error_register_img_put">Por favor coloque uma a imagem de perfil</string>
+        <string name="error_register_add_user">Erro ao adicionar usuario</string>
     <!--styles for projects-->
-    <string name="error_register_loading">Calma tá carregando mano</string>
-
-    <string name="error_register_img_put">Por favor coloque uma a imagem de perfil</string>
-
-    <string name="error_register_add_user">Erro ao adicionar usuario</string>
-
-    <string-array name="games_styles">
-        <item>RPG</item>
-        <item>Plataforma</item>
-        <item>Corrida</item>
-        <item>FPS</item>
-        <item>MOBA</item>
-        <item>MMORPG</item>
-        <item>Esporte</item>
-        <item>Simulacao</item>
-        <item>Estrategia</item>
-        <item>Tower Defense</item>
-        <item>Mundo Aberto</item>
-        <item>Aventura</item>
-        <item>Arcade</item>
-        <item>Luta</item>
-
-    </string-array>
-
-    <string-array name="games_array_areas">
-        <item>Select one option</item>
-        <item>Programmer</item>
-        <item>Designer</item>
-        <item>Artist</item>
-        <item>Sound Master</item>
-
-    </string-array>
-
-    <string-array name="games_array_sound_master">
-        <item>Engenheiro de som</item>
-
-    </string-array>
-    <!--Erros e informações para a textView do registro-->
-    <string-array name="games_array_artist">
-        <item>Animador</item>
-        <item>Roteirista</item>
-        <item>Concept Artist</item>
-
-    </string-array>
-    <string-array name="games_array_designer">
-        <item>Game Designer</item>
-        <item>Mobile</item>
-
-    </string-array>
-    <string-array name="games_array_programmer">
-        <item>Level Designer</item>
-        <item>Servidor</item>
-        <item>Web</item>
-        <item>Tester</item>
-        <item>Mobile</item>
-        <item>Redes</item>
-        <item>2D</item>
-        <item>3D</item>
-
-    </string-array>
-
-
+        <string-array name="games_styles">
+            <item>RPG</item>
+            <item>Plataforma</item>
+            <item>Corrida</item>
+            <item>FPS</item>
+            <item>MOBA</item>
+            <item>MMORPG</item>
+            <item>Esporte</item>
+            <item>Simulacao</item>
+            <item>Estrategia</item>
+            <item>Tower Defense</item>
+            <item>Mundo Aberto</item>
+            <item>Aventura</item>
+            <item>Arcade</item>
+            <item>Luta</item>
+        </string-array>
+    <!--Array for areas-->
+        <string-array name="games_array_areas">
+            <item>Select one option</item>
+            <item>Programmer</item>
+            <item>Designer</item>
+            <item>Artist</item>
+            <item>Sound Master</item>
+        </string-array>
+    <!--Array for each area-->
+        <string-array name="games_array_sound_master">
+            <item>Engenheiro de som</item>
+        </string-array>
+        <string-array name="games_array_artist">
+            <item>Animador</item>
+            <item>Roteirista</item>
+            <item>Concept Artist</item>
+        </string-array>
+        <string-array name="games_array_designer">
+            <item>Game Designer</item>
+            <item>Mobile</item>
+        </string-array>
+        <string-array name="games_array_programmer">
+            <item>Level Designer</item>
+            <item>Servidor</item>
+            <item>Web</item>
+            <item>Tester</item>
+            <item>Mobile</item>
+            <item>Redes</item>
+            <item>2D</item>
+            <item>3D</item>
+        </string-array>
 </resources>
