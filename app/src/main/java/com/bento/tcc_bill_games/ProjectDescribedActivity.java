@@ -22,6 +22,7 @@ public class ProjectDescribedActivity extends AppCompatActivity {
     private TextView txtName;
     private TextView txtDescription;
     private TextView txtCategory;
+    Boolean logic;//true in the main's case and false in the projectActivity's case
     User user;
 
     @Override
@@ -41,10 +42,18 @@ public class ProjectDescribedActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProjectDescribedActivity.this, ProjectActivity.class);
-                intent.putExtra("user", user);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                if(logic) {
+                    Intent intent = new Intent(ProjectDescribedActivity.this, MainActivity.class);
+                    intent.putExtra("user", user);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(ProjectDescribedActivity.this, ProjectActivity.class);
+                    intent.putExtra("user", user);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -73,7 +82,7 @@ public class ProjectDescribedActivity extends AppCompatActivity {
         Project project;
         if(extras!= null && extras.containsKey("projectSend") ) {
             project = (Project) extras.get("projectSend");
-
+            logic = (Boolean) extras.get("logic");
             if(project.getName().equals("")) {
                 Intent intent = new Intent(ProjectDescribedActivity.this, MainActivity.class);
                 startActivity(intent);

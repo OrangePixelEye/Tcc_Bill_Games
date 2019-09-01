@@ -123,7 +123,7 @@ public class AddProjectActivity extends AppCompatActivity {
                 ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Log.i("Teste", uri.toString());
+
                         String project_id = UUID.randomUUID().toString();
                         String uuid = FirebaseAuth.getInstance().getUid();
                         String name = Name.getText().toString();
@@ -132,7 +132,7 @@ public class AddProjectActivity extends AppCompatActivity {
                         String profile_url = uri.toString();
 
                         Project proj = new Project(gd, project_id, uuid, name, description, profile_url);
-                        Log.i("Teste", gd);
+
 
                         FirebaseFirestore.getInstance().collection("projects").add(proj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override

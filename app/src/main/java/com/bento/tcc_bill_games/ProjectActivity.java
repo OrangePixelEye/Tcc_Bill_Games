@@ -40,8 +40,8 @@ public class ProjectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
         LoginUser();
-        back = findViewById(R.id.btn_project_back);
         //UI references
+        back = findViewById(R.id.btn_project_back);
         btn_new_project = findViewById(R.id.btn_new_project);
         RecyclerView rv = findViewById(R.id.rv_projects);
 
@@ -57,6 +57,7 @@ public class ProjectActivity extends AppCompatActivity {
                 Intent intent = new Intent(ProjectActivity.this, ProjectDescribedActivity.class);
 
                 intent.putExtra("projectSend", projItem.p);
+                intent.putExtra("logic",false);
 
                 startActivity(intent);
             }
@@ -106,7 +107,18 @@ public class ProjectActivity extends AppCompatActivity {
 
 
     private void fetchProjects() {
-        FirebaseFirestore.getInstance().collection("projects").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("projects").whereEqualTo("uuid",FirebaseAuth.getInstance().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                for(DocumentSnapshot doc:docs){
+                    final Project project = doc.toObject(Project.class);
+                    adapter.add(new ProjectItem(project));
+                }
+            }
+        });
+        /*
+        FirebaseFirestore.getInstance().collection("projects").whereArrayContains("uuid",FirebaseAuth.getInstance().getUid()).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if(e != null){
@@ -121,7 +133,7 @@ public class ProjectActivity extends AppCompatActivity {
 
                 }
             }
-        });
+        });*/
     }
 
     private class ProjectItem extends Item<ViewHolder>{
@@ -137,9 +149,6 @@ public class ProjectActivity extends AppCompatActivity {
             TextView txt_description = viewHolder.itemView.findViewById(R.id.txtItemProjectDescription);
             txt_username.setText(p.getName());
             txt_description.setText(p.getDescription());
-
-
-
         }
 
 

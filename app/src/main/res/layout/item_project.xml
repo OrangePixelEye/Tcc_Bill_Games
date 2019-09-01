@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout2"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
@@ -21,6 +21,7 @@
         android:textStyle="bold"
         android:layout_height="28dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/txtItemProjectDescription"
         app:layout_constraintEnd_toEndOf="@+id/txtItemProjectDescription"
         app:layout_constraintStart_toStartOf="@+id/txtItemProjectDescription"
@@ -32,6 +33,7 @@
         android:layout_height="88dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="@+id/view2"
         app:layout_constraintStart_toStartOf="@+id/view2" />
