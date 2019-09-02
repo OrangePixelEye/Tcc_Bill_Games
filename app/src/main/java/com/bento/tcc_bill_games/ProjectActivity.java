@@ -117,23 +117,6 @@ public class ProjectActivity extends AppCompatActivity {
                 }
             }
         });
-        /*
-        FirebaseFirestore.getInstance().collection("projects").whereArrayContains("uuid",FirebaseAuth.getInstance().getUid()).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(e != null){
-                    Log.e("Teste", e.getMessage());
-                    return;
-                }
-                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                for(DocumentSnapshot doc:docs){
-                    final Project project = doc.toObject(Project.class);
-                    adapter.add(new ProjectItem(project));
-
-
-                }
-            }
-        });*/
     }
 
     private class ProjectItem extends Item<ViewHolder>{

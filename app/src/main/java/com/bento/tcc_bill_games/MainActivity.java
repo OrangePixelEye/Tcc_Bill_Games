@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_projects;
     private Button btn_logout;
     private GroupAdapter adapter;
+    private EditText search_bar;
     private Button back;
     User user;
 
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         btn_projects = findViewById(R.id.btn_projects);
         btn_projects.getBackground().setAlpha(0);
         btn_logout = findViewById(R.id.btn_logout);
+        search_bar = findViewById(R.id.SearchBar);
         RecyclerView rv = findViewById(R.id.rv_main_activity);
 
         adapter = new GroupAdapter();
@@ -74,7 +77,9 @@ public class MainActivity extends AppCompatActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MessageActivity.class);
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                final String search = search_bar.getText().toString();
+                intent.putExtra("search",search);
                 startActivity(intent);
             }
         });

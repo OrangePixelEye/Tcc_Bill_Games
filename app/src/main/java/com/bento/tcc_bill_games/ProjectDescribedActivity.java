@@ -36,6 +36,7 @@ public class ProjectDescribedActivity extends AppCompatActivity {
         txtCategory = findViewById(R.id.txtProjectDescribedCategory);
         back = findViewById(R.id.btn_project_described_back);
 
+
         LoginUser();
         configureScreen();
 
