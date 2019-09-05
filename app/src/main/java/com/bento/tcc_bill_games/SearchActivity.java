@@ -8,6 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
+import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
@@ -28,18 +35,91 @@ import javax.annotation.Nullable;
 
 public class SearchActivity extends AppCompatActivity {
     String s;
+    private Switch sw;
+    private Button research;
     private GroupAdapter adapter;
+    private EditText research_text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        sw = findViewById(R.id.sw_search);
+        sw.setChecked(true);
+        sw.setChecked(false);
+        research = findViewById(R.id.btn_search_search);
+        research_text = findViewById(R.id.edtxt_search_search);
+
+        research.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                s = research.getText().toString();
+            }
+        });
+
         configureSearch();
+
         RecyclerView rv = findViewById(R.id.rv_search);
 
         adapter = new GroupAdapter();
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
+
         fetchProjects();
+
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    adapter.clear();
+
+                    fetchUsers();
+
+                    adapter.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(@NonNull Item item, @NonNull View view) {
+                            SearchActivity.ProjectItem projItem = (SearchActivity.ProjectItem) item;
+
+                            Intent intent = new Intent(SearchActivity.this, ProjectDescribedActivity.class);
+
+                            intent.putExtra("projectSend", projItem.p);
+                            intent.putExtra("logic",false);
+
+                            startActivity(intent);
+                        }
+                    });
+                }else{
+                    adapter.clear();
+                    fetchProjects();
+                }
+            }
+        });
+
+
+    }
+
+    private void fetchUsers() {
+        FirebaseFirestore.getInstance().collection("users").whereEqualTo("name", s).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                for(DocumentSnapshot doc:docs){
+                    final User user = doc.toObject(User.class);
+                    adapter.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(@NonNull Item item, @NonNull View view) {
+                            SearchActivity.ProjectItem projItem = (SearchActivity.ProjectItem) item;
+
+                            Intent intent = new Intent(SearchActivity.this, ProjectDescribedActivity.class);
+
+                            intent.putExtra("projectSend", projItem.p);
+                            intent.putExtra("logic",false);
+
+                            startActivity(intent);
+                        }
+                    });
+                    adapter.add(new SearchActivity.UserItem(user));
+                }
+            }
+        });
     }
 
     private void configureSearch() {
@@ -66,6 +146,7 @@ public class SearchActivity extends AppCompatActivity {
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                 for(DocumentSnapshot doc:docs){
                     final Project project = doc.toObject(Project.class);
+
                     adapter.add(new SearchActivity.ProjectItem(project));
                 }
             }
@@ -93,5 +174,25 @@ public class SearchActivity extends AppCompatActivity {
             return R.layout.item_project;
         }
 
+    }
+    private class UserItem extends Item<ViewHolder> {
+        private User user;
+
+        public UserItem(User user) {
+            this.user = user;
+        }
+
+        @Override
+        public void bind(@NonNull ViewHolder viewHolder, int position) {
+            TextView txt_username = viewHolder.itemView.findViewById(R.id.textView);
+            ImageView imgPhoto = viewHolder.itemView.findViewById(R.id.imageView);
+            txt_username.setText(user.getName());
+            Picasso.get().load(user.getProfile_url()).into(imgPhoto);
+        }
+
+        @Override
+        public int getLayout() {
+            return R.layout.item_user;
+        }
     }
 }

@@ -50,7 +50,6 @@ public class ContactsActivity extends AppCompatActivity {
                 for(DocumentSnapshot doc:docs){
                     User user = doc.toObject(User.class);
                     Log.i("Teste", user.getName());
-
                     adapter.add(new UserItem(user));
                 }
 

@@ -176,9 +176,6 @@ public class MainActivity extends AppCompatActivity {
             TextView txt_description = viewHolder.itemView.findViewById(R.id.txtItemProjectDescription);
             txt_username.setText(p.getName());
             txt_description.setText(p.getDescription());
-
-
-
         }
 
 
