@@ -20,7 +20,7 @@
     <string name="error_register_img_put">Por favor coloque uma a imagem de perfil</string>
     <string name="error_register_add_user">Erro ao adicionar usuario</string>
     <string name="users">users</string>
-    <string name="projects">Projects</string>
+    <string name="projects">projects</string>
     <!--styles for projects-->
     <string-array name="games_styles">
         <item>RPG</item>

@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,13 +31,22 @@ import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 public class SearchActivity extends AppCompatActivity {
+
     String s;
+    boolean is_u_bold = false;
+    boolean is_p_bold = false;
+    String[] verify;
+
+
     private Switch sw;
+    private TextView proj;
+    private TextView user;
     private Button research;
     private GroupAdapter adapter;
     private EditText research_text;
@@ -43,16 +54,23 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        //UI
+        proj = findViewById(R.id.txt_search_projects);
+        user = findViewById(R.id.txt_search_users);
         sw = findViewById(R.id.sw_search);
-        sw.setChecked(true);
-        sw.setChecked(false);
         research = findViewById(R.id.btn_search_search);
         research_text = findViewById(R.id.edtxt_search_search);
+
+        Resources res = getResources();
+        verify = res.getStringArray(R.array.games_array_areas);
 
         research.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 s = research.getText().toString();
+                Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
+                intent.putExtra("search",s);
+                startActivity(intent);
             }
         });
 
@@ -65,14 +83,34 @@ public class SearchActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
 
         fetchProjects();
+        proj.setTypeface(null,Typeface.BOLD);
+        is_p_bold = true;
 
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     adapter.clear();
+                    if(is_p_bold) {
+                        proj.setTypeface(null, Typeface.NORMAL);
+                        is_p_bold = false;
+                    }
+                    is_u_bold=true;
+                    user.setTypeface(null, Typeface.BOLD);
 
                     fetchUsers();
 
+                }else{
+                    adapter.clear();
+
+                    if(is_u_bold) {
+                        user.setTypeface(null, Typeface.NORMAL);
+                        is_u_bold = false;
+                    }
+
+                    proj.setTypeface(null,Typeface.BOLD);
+                    is_p_bold = true;
+
+                    fetchProjects();
                     adapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(@NonNull Item item, @NonNull View view) {
@@ -86,9 +124,6 @@ public class SearchActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
-                }else{
-                    adapter.clear();
-                    fetchProjects();
                 }
             }
         });
@@ -146,7 +181,6 @@ public class SearchActivity extends AppCompatActivity {
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                 for(DocumentSnapshot doc:docs){
                     final Project project = doc.toObject(Project.class);
-
                     adapter.add(new SearchActivity.ProjectItem(project));
                 }
             }
