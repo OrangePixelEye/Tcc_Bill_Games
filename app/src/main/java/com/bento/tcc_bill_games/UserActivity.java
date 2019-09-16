@@ -1,5 +1,6 @@
 package com.bento.tcc_bill_games;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
@@ -35,6 +41,7 @@ public class UserActivity extends AppCompatActivity {
     private Button btn_change_photo;
     private Button update_profile;
     private Button back;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +74,7 @@ public class UserActivity extends AppCompatActivity {
         configureScreen();
 
         //Button events
-        btn_change_photo.setOnClickListener(new View.OnClickListener() {
+        imgUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updatePhoto();
@@ -85,7 +92,32 @@ public class UserActivity extends AppCompatActivity {
     }
 
     private void UpdateUserProfile() {
+        //
+        GetValues();
+        DocumentReference MyDocRef = FirebaseFirestore.getInstance().collection("users").document(user.getUuid());
+// Set the "isCapital" field of the city 'DC'
 
+        MyDocRef
+                .update("capital", true,
+                "",""
+                )
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("teste", "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("teste", "Error updating document", e);
+                    }
+                });
+    }
+
+    private void GetValues() {
+
+        //user();
     }
 
     private void updatePhoto() {
@@ -97,28 +129,30 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 0){
-            Log.i("Teste", "até aqui bl");
-            mSelectedUri = data.getData();
-            Bitmap bitmap = null;
-            try {
-
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-                Log.i("Teste", "pegou a foto");
-                Picasso.get().load(mSelectedUri).into(imgUser);
-                imgUser.setImageDrawable(new BitmapDrawable(getResources(),bitmap));
-                update_profile.setVisibility(View.VISIBLE);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+        if(requestCode == 0) {
+            //this is the case that user selected a photo
+            if (resultCode == RESULT_OK) {
+                mSelectedUri = data.getData();
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
+                    Picasso.get().load(mSelectedUri).into(imgUser);
+                    imgUser.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
+                    update_profile.setVisibility(View.VISIBLE);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }if(resultCode == RESULT_CANCELED){
+                recreate();
             }
         }
     }
 
     private void configureScreen() {
         Bundle extras = getIntent().getExtras();
-        User user;
+
         if(extras!= null && extras.containsKey("user") ) {
             user = (User) extras.get("user");
             if(user.getName().equals("")) {
@@ -128,10 +162,8 @@ public class UserActivity extends AppCompatActivity {
                 edtxtNameUser.setText(user.getName());
                 edtxtUserameUser.setText(user.getUsername());
                 Picasso.get().load(user.getProfile_url()).into(imgUser);
-
             }
         }else{
-            Log.i("Teste","erro ao mandar a classe usuario");
             Intent intent = new Intent(UserActivity.this, MainActivity.class);
             startActivity(intent);
         }

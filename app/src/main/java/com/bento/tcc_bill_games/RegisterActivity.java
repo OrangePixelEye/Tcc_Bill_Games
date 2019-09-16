@@ -55,7 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
     private Spinner sp_line;
     private EditText PhoneNumber;
 
-    private Boolean isSelected = false;
     private Boolean is_ok;
 
     @Override
@@ -77,7 +76,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         //btn will appear when all the form is ok
         btn_register.setVisibility(View.GONE);
-
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +83,18 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        ArrayConfig();
+
+        //event for photo selection
+        selected_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectPhoto();
+            }
+        });
+    }
+
+    private void ArrayConfig() {
         //Arrays adapters
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.games_array_areas, android.R.layout.simple_spinner_item);
@@ -106,7 +116,6 @@ public class RegisterActivity extends AppCompatActivity {
                 R.array.games_array_sound_master, android.R.layout.simple_spinner_item);
         adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-
         //arrays for area selection
         sp_area.setAdapter(adapter);
         //spinner for each area
@@ -118,32 +127,23 @@ public class RegisterActivity extends AppCompatActivity {
                         sp_line.setVisibility(View.GONE);
                         break;
                     case 1:
-
                         sp_line.setAdapter(adapterP);
                         sp_line.setVisibility(View.VISIBLE);
-
                         break;
                     case 2:
-
                         sp_line.setAdapter(adapterD);
                         sp_line.setVisibility(View.VISIBLE);
-
                         break;
                     case 3:
-
                         sp_line.setAdapter(adapterA);
                         sp_line.setVisibility(View.VISIBLE);
-
                         break;
                     case 4:
-
                         sp_line.setAdapter(adapterSA);
                         sp_line.setVisibility(View.VISIBLE);
-
                         break;
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -153,43 +153,22 @@ public class RegisterActivity extends AppCompatActivity {
         sp_line.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                isSelected = true;
 
                 final String Vemail = Email.getText().toString();
                 final String Vpassword = Password.getText().toString();
                 final String Vname = Name.getText().toString();
                 final String Vusername = Username.getText().toString();
                 //user's data verification
-                if(Vusername.isEmpty() || Vname.isEmpty() || Vemail.isEmpty()|| Vpassword.isEmpty()){
-                    is_ok = false;
-                }else {
-                    is_ok = true;
-                }
-
+                is_ok = !Vusername.isEmpty() && !Vname.isEmpty() && !Vemail.isEmpty() && !Vpassword.isEmpty();
                 if(is_ok){
                     btn_register.setVisibility(View.VISIBLE);
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
-
-
-
-        //event for photo selection
-        selected_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectPhoto();
-            }
-        });
-
-
-
-
     }
 
     private void selectPhoto() {
@@ -234,21 +213,13 @@ public class RegisterActivity extends AppCompatActivity {
         //get the edit text content
         final String email = Email.getText().toString();
         final String password = Password.getText().toString();
-        final String name = Name.getText().toString();
-        final String username = Username.getText().toString();
 
-        //user's data verification
-        if(username.isEmpty() || username == null || name.isEmpty() || name == null || email.isEmpty() || email == null || password.isEmpty() || password == null){
-            Toast.makeText(this, "O email e senha devem ser preenchidos", Toast.LENGTH_SHORT).show();
-            return;
-        }
         //if everything is ok the it create a login email
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            Log.i("Teste", task.getResult().getUser().getUid());
                             FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -278,27 +249,35 @@ public class RegisterActivity extends AppCompatActivity {
     private void SaveUserInFirebase() {
         //create a name for the user's image
         String filename = UUID.randomUUID().toString();
+
         //a reference to the firestore database
         final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + filename);
+
         ref.putFile(mSelectedUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-
                         //user's information that are going to the user's class
                         String uid = FirebaseAuth.getInstance().getUid();
                         String username = Username.getText().toString();
                         String profile_url = uri.toString();
                         String name = Name.getText().toString();
 
-                        User user = new User(uid, username, profile_url, name);
+                        TextView Area = (TextView)sp_area.getSelectedView();
+                        String area = Area.getText().toString();
+
+                        TextView Line = (TextView)sp_line.getSelectedView();
+                        String line = Line.getText().toString();
+                        String phone = "";
+                        String city = "";
+
+                        User user = new User(uid, username, profile_url, name,area,line, phone,city);
                         //create a doc reference with the firebaseAuth's id
                         FirebaseFirestore.getInstance().collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-
                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);

@@ -132,6 +132,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void fetchUsers() {
+
         FirebaseFirestore.getInstance().collection("users").whereEqualTo("name", s).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

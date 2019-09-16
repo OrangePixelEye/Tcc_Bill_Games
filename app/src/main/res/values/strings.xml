@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">Bill Games</string>
+    <!--project described-->
+    <string name="project_described_update">Update</string>
     <!--login strings-->
     <string name="login_button">Login</string>
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
     <string name="login_create_account">Create your account</string>
+
     <!--register strings and arrays-->
     <string name="register_interest"> What is your area of interest</string>
     <string name="register">Register</string>
@@ -15,12 +18,14 @@
     <string name="add_projects_Description">Description</string>
     <string name="add_projects_add">Add project</string>
     <string name="add_projects_add_category">Selecione uma categoria</string>
+
     <!--Errors-->
     <string name="error_register_loading">Calma tá carregando mano</string>
     <string name="error_register_img_put">Por favor coloque uma a imagem de perfil</string>
     <string name="error_register_add_user">Erro ao adicionar usuario</string>
     <string name="users">users</string>
     <string name="projects">projects</string>
+
     <!--styles for projects-->
     <string-array name="games_styles">
         <item>RPG</item>
@@ -38,6 +43,7 @@
         <item>Arcade</item>
         <item>Luta</item>
     </string-array>
+
     <!--Array for areas-->
     <string-array name="games_array_areas">
         <item>Select one option</item>
@@ -46,6 +52,7 @@
         <item>Artist</item>
         <item>Sound Master</item>
     </string-array>
+
     <!--Array for each area-->
     <string-array name="games_array_sound_master">
         <item>Engenheiro de som</item>

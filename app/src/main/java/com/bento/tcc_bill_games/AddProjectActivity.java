@@ -48,8 +48,9 @@ public class AddProjectActivity extends AppCompatActivity {
     private Spinner sp;
     private TextView txt;
     private Button back;
-    private int a;
+    boolean logic = false;
     User user;
+    Project project;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,8 @@ public class AddProjectActivity extends AppCompatActivity {
         });
         back = findViewById(R.id.btn_add_project_back);
 
+        verifyUpdate();
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.games_styles, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -82,12 +85,10 @@ public class AddProjectActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 createProj.setVisibility(View.VISIBLE);
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
                 final Resources r = getResources();
                 txt.setText(r.getString(R.string.add_projects_add_category));
 
@@ -104,15 +105,53 @@ public class AddProjectActivity extends AppCompatActivity {
             }
         });
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AddProjectActivity.this, ProjectActivity.class);
-                intent.putExtra("user",  user);
-                startActivity(intent);
-            }
-        });
 
+
+    }
+
+    private void verifyUpdate() {
+        Bundle extras = getIntent().getExtras();
+        if(extras!= null && extras.containsKey("logic")) {
+            logic = (Boolean) extras.get("logic");
+            if(extras.containsKey("projectSend")) {
+                project = (Project) extras.get("projectSend");
+                if (project.getName().equals("")) {
+                    Intent intent = new Intent(AddProjectActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Name.setText(project.getName());
+                    Description.setText(project.getDescription());
+                    Picasso.get().load(project.getProject_url()).into(projImage);
+                    addImage.setVisibility(View.GONE);
+                    projImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            selectPhoto();
+                        }
+                    });
+                }
+            }
+
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(logic){
+                        Intent intent = new Intent(AddProjectActivity.this, ProjectDescribedActivity.class);
+                        intent.putExtra("projectSend", project);
+                        intent.putExtra("user",user);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(AddProjectActivity.this, ProjectActivity.class);
+                        intent.putExtra("user", user);
+                        startActivity(intent);
+                    }
+                }
+            });
+
+        }else{
+            Intent intent = new Intent(AddProjectActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void createProject() {
@@ -129,7 +168,9 @@ public class AddProjectActivity extends AppCompatActivity {
                         String uuid = FirebaseAuth.getInstance().getUid();
                         String name = Name.getText().toString();
                         String description = Description.getText().toString();
-                        String gd = String.valueOf(sp.getSelectedItemPosition());
+
+                        TextView Line = (TextView)sp.getSelectedView();
+                        String gd = Line.getText().toString();
                         String profile_url = uri.toString();
 
                         Project proj = new Project(gd, project_id, uuid, name, description, profile_url);

@@ -70,6 +70,7 @@ public class ProjectActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ProjectActivity.this, AddProjectActivity.class);
                 intent.putExtra("user", user);
+                intent.putExtra("logic",false);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
