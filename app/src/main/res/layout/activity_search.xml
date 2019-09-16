@@ -67,5 +67,26 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sw_search" />
+        app:layout_constraintTop_toBottomOf="@+id/rg_search_user" />
+
+    <RadioGroup
+        android:id="@+id/rg_search_user"
+        android:layout_width="131dp"
+        android:layout_height="65dp"
+        app:layout_constraintEnd_toEndOf="@+id/txt_search_users"
+        app:layout_constraintStart_toStartOf="@+id/txt_search_users"
+        app:layout_constraintTop_toBottomOf="@+id/txt_search_users">
+
+        <RadioButton
+            android:id="@+id/rb_search_user_by_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_users_name" />
+
+        <RadioButton
+            android:id="@+id/rb_search_user_by_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_users_category" />
+    </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

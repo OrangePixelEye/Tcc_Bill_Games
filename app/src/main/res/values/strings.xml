@@ -44,6 +44,10 @@
         <item>Luta</item>
     </string-array>
 
+    <!--Search-->
+    <string name="search_users_name">By Name</string>
+    <string name="search_users_category">By Category</string>
+
     <!--Array for areas-->
     <string-array name="games_array_areas">
         <item>Select one option</item>

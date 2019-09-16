@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -50,6 +52,7 @@ public class SearchActivity extends AppCompatActivity {
     private Button research;
     private GroupAdapter adapter;
     private EditText research_text;
+    private RadioGroup rb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +63,17 @@ public class SearchActivity extends AppCompatActivity {
         sw = findViewById(R.id.sw_search);
         research = findViewById(R.id.btn_search_search);
         research_text = findViewById(R.id.edtxt_search_search);
-
+        rb = findViewById(R.id.rg_search_user);
         Resources res = getResources();
         verify = res.getStringArray(R.array.games_array_areas);
+
+        rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton r1 = findViewById(R.id.rb_search_user_by_name);
+
+            }
+        });
 
         research.setOnClickListener(new View.OnClickListener() {
             @Override
