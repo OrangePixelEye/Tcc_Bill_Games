@@ -139,10 +139,12 @@ public class AddProjectActivity extends AppCompatActivity {
                         Intent intent = new Intent(AddProjectActivity.this, ProjectDescribedActivity.class);
                         intent.putExtra("projectSend", project);
                         intent.putExtra("user",user);
+                        intent.putExtra("logic",logic);
                         startActivity(intent);
                     }else{
                         Intent intent = new Intent(AddProjectActivity.this, ProjectActivity.class);
                         intent.putExtra("user", user);
+                        intent.putExtra("logic",logic);
                         startActivity(intent);
                     }
                 }

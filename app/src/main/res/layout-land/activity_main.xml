@@ -78,4 +78,14 @@
         app:layout_constraintStart_toStartOf="@+id/btn_user_profile"
         app:layout_constraintTop_toTopOf="@+id/btn_user_profile" />
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_project"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_projects"
+        app:layout_constraintEnd_toEndOf="@+id/btn_projects"
+        app:layout_constraintStart_toStartOf="@+id/btn_projects"
+        app:layout_constraintTop_toTopOf="@+id/btn_projects"
+        android:background="@mipmap/project_icon" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

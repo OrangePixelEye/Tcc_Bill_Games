@@ -52,7 +52,7 @@ public class SearchActivity extends AppCompatActivity {
     private Button research;
     private GroupAdapter adapter;
     private EditText research_text;
-    private RadioGroup rb;
+    private RadioGroup rg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +63,13 @@ public class SearchActivity extends AppCompatActivity {
         sw = findViewById(R.id.sw_search);
         research = findViewById(R.id.btn_search_search);
         research_text = findViewById(R.id.edtxt_search_search);
-        rb = findViewById(R.id.rg_search_user);
+        rg = findViewById(R.id.rg_search_user);
         Resources res = getResources();
         verify = res.getStringArray(R.array.games_array_areas);
 
-        rb.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rg.setVisibility(View.GONE);
+
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton r1 = findViewById(R.id.rb_search_user_by_name);
@@ -105,6 +107,7 @@ public class SearchActivity extends AppCompatActivity {
                         proj.setTypeface(null, Typeface.NORMAL);
                         is_p_bold = false;
                     }
+                    rg.setVisibility(View.VISIBLE);
                     is_u_bold=true;
                     user.setTypeface(null, Typeface.BOLD);
 
@@ -116,6 +119,7 @@ public class SearchActivity extends AppCompatActivity {
                     if(is_u_bold) {
                         user.setTypeface(null, Typeface.NORMAL);
                         is_u_bold = false;
+                        rg.setVisibility(View.GONE);
                     }
 
                     proj.setTypeface(null,Typeface.BOLD);
