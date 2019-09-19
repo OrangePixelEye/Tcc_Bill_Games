@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Bill Games</string>
+    <!--Add Projects -->
+    <string name="add_projects_name">project"s name</string>
+    <string name="add_projects_description">project"s description</string>
     <!--project described-->
     <string name="project_described_update">Update</string>
     <!--login strings-->
@@ -29,13 +32,13 @@
     <!--styles for projects-->
     <string-array name="games_styles">
         <item>RPG</item>
-        <item>Plataforma</item>
-        <item>Corrida</item>
+        <item>Platform</item>
+        <item>Race</item>
         <item>FPS</item>
         <item>MOBA</item>
         <item>MMORPG</item>
-        <item>Esporte</item>
-        <item>Simulacao</item>
+        <item>Sports</item>
+        <item>Simulation</item>
         <item>Estrategia</item>
         <item>Tower Defense</item>
         <item>Mundo Aberto</item>
@@ -46,6 +49,7 @@
 
     <!--Search-->
     <string name="search_users_name">By Name</string>
+    <string name="search_main">Search projects</string>
     <string name="search_users_category">By Category</string>
 
     <!--Array for areas-->

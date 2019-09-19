@@ -24,12 +24,13 @@
         android:layout_height="97dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="68dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/add_projects_Description"
         app:layout_constraintBottom_toTopOf="@+id/btn_create_project"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -38,26 +39,27 @@
         android:layout_height="42dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="48dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/register_name"
         app:layout_constraintBottom_toTopOf="@+id/etProjectsDescription"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imgAddProject"
-        android:layout_width="315dp"
-        android:layout_height="320dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/etAddProjectName"
+        app:layout_constraintBottom_toTopOf="@+id/sp_add_projects"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_add_project_back"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Spinner
         android:id="@+id/sp_add_projects"
@@ -72,8 +74,8 @@
 
     <Button
         android:id="@+id/btn_add_project_image"
-        android:layout_width="315dp"
-        android:layout_height="320dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/imgAddProject"
         app:layout_constraintEnd_toEndOf="@+id/imgAddProject"
         app:layout_constraintStart_toStartOf="@+id/imgAddProject"

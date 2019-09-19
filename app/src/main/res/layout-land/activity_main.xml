@@ -38,9 +38,10 @@
         android:id="@+id/btn_projects"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="36dp"
         android:background="@drawable/bg_button__img_rounded"
         app:layout_constraintEnd_toEndOf="@+id/btn_user_profile"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/btn_user_profile"
         app:layout_constraintTop_toBottomOf="@+id/btn_user_profile" />
 

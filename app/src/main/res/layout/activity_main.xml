@@ -50,6 +50,7 @@
         android:id="@+id/SearchBar"
         android:layout_width="263dp"
         android:layout_height="41dp"
+        android:hint="@string/search_main"
         android:layout_marginStart="16dp"
         android:layout_marginTop="28dp"
         android:ems="10"

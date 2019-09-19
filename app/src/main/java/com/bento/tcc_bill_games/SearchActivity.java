@@ -73,17 +73,9 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton r1 = findViewById(R.id.rb_search_user_by_name);
-
-            }
-        });
-
-        research.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                s = research.getText().toString();
-                Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
-                intent.putExtra("search",s);
-                startActivity(intent);
+                if(checkedId == 2){
+                    fetchUsersByCategory();
+                }
             }
         });
 
@@ -115,40 +107,54 @@ public class SearchActivity extends AppCompatActivity {
 
                 }else{
                     adapter.clear();
-
                     if(is_u_bold) {
                         user.setTypeface(null, Typeface.NORMAL);
                         is_u_bold = false;
                         rg.setVisibility(View.GONE);
                     }
-
                     proj.setTypeface(null,Typeface.BOLD);
                     is_p_bold = true;
-
                     fetchProjects();
                     adapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(@NonNull Item item, @NonNull View view) {
                             SearchActivity.ProjectItem projItem = (SearchActivity.ProjectItem) item;
-
                             Intent intent = new Intent(SearchActivity.this, ProjectDescribedActivity.class);
-
                             intent.putExtra("projectSend", projItem.p);
                             intent.putExtra("logic",false);
-
                             startActivity(intent);
                         }
                     });
                 }
             }
         });
-
-
     }
 
     private void fetchUsers() {
-
         FirebaseFirestore.getInstance().collection("users").whereEqualTo("name", s).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                for(DocumentSnapshot doc:docs){
+                    final User user = doc.toObject(User.class);
+                    adapter.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(@NonNull Item item, @NonNull View view) {
+                            SearchActivity.ProjectItem projItem = (SearchActivity.ProjectItem) item;
+                            Intent intent = new Intent(SearchActivity.this, ProjectDescribedActivity.class);
+                            intent.putExtra("projectSend", projItem.p);
+                            intent.putExtra("logic",false);
+                            startActivity(intent);
+                        }
+                    });
+                    adapter.add(new SearchActivity.UserItem(user));
+                }
+            }
+        });
+    }
+
+    private void fetchUsersByCategory() {
+        FirebaseFirestore.getInstance().collection("users").whereEqualTo("category", s).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
@@ -183,6 +189,15 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent);
             }else{
                 s = a;
+                research.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        s = research_text.getText().toString();
+                        Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
+                        intent.putExtra("search", s);
+                        startActivity(intent);
+                    }
+                });
             }
         }else{
             Intent intent = new Intent(SearchActivity.this, MainActivity.class);
