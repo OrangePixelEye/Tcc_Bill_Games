@@ -12,10 +12,11 @@
         android:layout_height="49dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="76dp"
         android:text="@string/add_projects_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -24,13 +25,13 @@
         android:layout_height="97dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="44dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/add_projects_Description"
+        android:hint="@string/add_projects_Description"
+        android:inputType="textMultiLine"
         app:layout_constraintBottom_toTopOf="@+id/btn_create_project"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -39,10 +40,10 @@
         android:layout_height="42dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
+        android:hint="@string/register_name"
         android:inputType="textPersonName"
-        android:text="@string/register_name"
         app:layout_constraintBottom_toTopOf="@+id/etProjectsDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -98,5 +99,26 @@
         android:layout_height="42dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_delete_project"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="@+id/btn_create_project"
+        app:layout_constraintTop_toBottomOf="@+id/btn_create_project" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="195dp"
+        tools:layout_editor_absoluteY="294dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

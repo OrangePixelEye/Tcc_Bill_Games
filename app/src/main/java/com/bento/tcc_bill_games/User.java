@@ -7,14 +7,18 @@ public class User implements Serializable {
             username,
             profile_url,
             name,
+            email,
             phone,
-            city,
             area,
             line;
 
+    public String getEmail() {
+        return email;
+    }
+
     public User(){}
 
-    public User(String uuid, String username, String profile_url, String name, String area,String line,String phone,String city) {
+    public User(String uuid, String username, String profile_url, String name, String area,String line,String phone, String email) {
         this.uuid = uuid;
         this.username = username;
         this.profile_url = profile_url;
@@ -22,7 +26,7 @@ public class User implements Serializable {
         this.area = area;
         this.line = line;
         this.phone = phone;
-        this.city = city;
+        this.email = email;
     }
 
     public String getArea() {
@@ -35,10 +39,6 @@ public class User implements Serializable {
 
     public String getPhone() {
         return phone;
-    }
-
-    public String getCity() {
-        return city;
     }
 
     public String getUuid() {

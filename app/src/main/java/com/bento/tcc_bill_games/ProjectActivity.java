@@ -139,4 +139,3 @@ public class ProjectActivity extends AppCompatActivity {
 
     }
 }
-

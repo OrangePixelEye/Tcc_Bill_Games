@@ -271,9 +271,9 @@ public class RegisterActivity extends AppCompatActivity {
                         TextView Line = (TextView)sp_line.getSelectedView();
                         String line = Line.getText().toString();
                         String phone = "";
-                        String city = "";
+                        String email = Email.getText().toString();
 
-                        User user = new User(uid, username, profile_url, name,area,line, phone,city);
+                        User user = new User(uid, username, profile_url, name,area,line, phone,email);
                         //create a doc reference with the firebaseAuth's id
                         FirebaseFirestore.getInstance().collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override

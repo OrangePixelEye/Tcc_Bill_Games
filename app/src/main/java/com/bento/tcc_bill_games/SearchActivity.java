@@ -72,8 +72,9 @@ public class SearchActivity extends AppCompatActivity {
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton r1 = findViewById(R.id.rb_search_user_by_name);
-                if(checkedId == 2){
+                RadioButton r1 = findViewById(R.id.rb_search_user_by_category);
+
+                if(r1.isChecked()){
                     fetchUsersByCategory();
                 }
             }
@@ -154,7 +155,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void fetchUsersByCategory() {
-        FirebaseFirestore.getInstance().collection("users").whereEqualTo("category", s).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("users").whereEqualTo("line", s).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();

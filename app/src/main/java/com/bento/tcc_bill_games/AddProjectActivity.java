@@ -47,7 +47,10 @@ public class AddProjectActivity extends AppCompatActivity {
     private Uri mSelectedUri;
     private Spinner sp;
     private TextView txt;
+    private Button delete;
     private Button back;
+    boolean is_new_photo = false;
+    boolean is_updating = false;
     boolean logic = false;
     User user;
     Project project;
@@ -73,6 +76,8 @@ public class AddProjectActivity extends AppCompatActivity {
             }
         });
         back = findViewById(R.id.btn_add_project_back);
+        delete = findViewById(R.id.btn_delete_project);
+        delete.setVisibility(View.GONE);
 
         verifyUpdate();
 
@@ -100,8 +105,14 @@ public class AddProjectActivity extends AppCompatActivity {
         createProj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createProject();
-                txt.setText(res.getString(R.string.error_register_loading));
+                createProj.setVisibility(View.GONE);
+                if(is_updating){
+                    UpdateProject();
+                    txt.setText(res.getString(R.string.error_register_loading));}
+                else {
+                    createProject();
+                    txt.setText(res.getString(R.string.error_register_loading));
+                }
             }
         });
 
@@ -119,10 +130,25 @@ public class AddProjectActivity extends AppCompatActivity {
                     Intent intent = new Intent(AddProjectActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {
+                    is_updating = true;
                     Name.setText(project.getName());
                     Description.setText(project.getDescription());
                     Picasso.get().load(project.getProject_url()).into(projImage);
                     addImage.setVisibility(View.GONE);
+                    delete.setVisibility(View.VISIBLE);
+                    delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FirebaseFirestore.getInstance().collection("projects").document(project.getProject_id()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Intent intent = new Intent(AddProjectActivity.this,MainActivity.class);
+                                    intent.putExtra("logic",logic);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    });
                     projImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -156,6 +182,76 @@ public class AddProjectActivity extends AppCompatActivity {
         }
     }
 
+    private void UpdateProject(){
+        if(is_new_photo){
+            String filename = UUID.randomUUID().toString();
+            final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + filename);
+            ref.putFile(mSelectedUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+
+                            String project_id = project.getUuid();
+                            String uuid = FirebaseAuth.getInstance().getUid();
+                            String name = Name.getText().toString();
+                            String description = Description.getText().toString();
+
+                            TextView Line = (TextView)sp.getSelectedView();
+                            String gd = Line.getText().toString();
+                            String profile_url = uri.toString();
+
+                            final Project proj = new Project(gd, project_id, uuid, name, description, profile_url);
+                            FirebaseFirestore.getInstance().collection("projects").document(project.getProject_id()).delete();
+                            FirebaseFirestore.getInstance().collection("projects").document(proj.getProject_id()).set(proj).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Intent intent  = new Intent(AddProjectActivity.this,ProjectDescribedActivity.class);
+                                    intent.putExtra("projectSend",proj);
+                                    intent.putExtra("logic",logic);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(AddProjectActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();;
+                }
+            });
+        }
+        else {
+            String project_id = project.getUuid();
+            String uuid = FirebaseAuth.getInstance().getUid();
+            String name = Name.getText().toString();
+            String description = Description.getText().toString();
+
+            TextView Line = (TextView)sp.getSelectedView();
+            String gd = Line.getText().toString();
+            String profile_url = project.getProject_url();
+
+            final Project proj = new Project(gd, project_id, uuid, name, description, profile_url);
+            FirebaseFirestore.getInstance().collection("projects").document(project.getUuid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    FirebaseFirestore.getInstance().collection("projects").document(proj.getProject_id()).set(proj).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Intent intent  = new Intent(AddProjectActivity.this,ProjectDescribedActivity.class);
+                            intent.putExtra("projectSend",proj);
+                            intent.putExtra("logic",logic);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            });
+
+        }
+    }
+
     private void createProject() {
         String filename = UUID.randomUUID().toString();
         final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + filename);
@@ -178,9 +274,9 @@ public class AddProjectActivity extends AppCompatActivity {
                         Project proj = new Project(gd, project_id, uuid, name, description, profile_url);
 
 
-                        FirebaseFirestore.getInstance().collection("projects").add(proj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        FirebaseFirestore.getInstance().collection("projects").document(proj.getProject_id()).set(proj).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onSuccess(DocumentReference documentReference) {
+                            public void onSuccess(Void aVoid) {
                                 Intent intent = new Intent(AddProjectActivity.this, ProjectActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
@@ -208,11 +304,12 @@ public class AddProjectActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 0){
             if (resultCode == RESULT_OK) {
-
                 mSelectedUri = data.getData();
                 Bitmap bitmap = null;
                 try {
-
+                    if(is_updating){
+                        is_new_photo = true;
+                    }
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
                     Picasso.get().load(mSelectedUri).into(projImage);
                     projImage.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
@@ -228,6 +325,7 @@ public class AddProjectActivity extends AppCompatActivity {
             recreate();
         }
     }
+
     private void LoginUser() {
         String doc = FirebaseAuth.getInstance().getUid();
         if (doc != null) {
@@ -245,6 +343,5 @@ public class AddProjectActivity extends AppCompatActivity {
             });
         }
     }
-
 
 }
