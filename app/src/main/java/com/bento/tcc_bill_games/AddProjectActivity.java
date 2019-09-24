@@ -193,7 +193,7 @@ public class AddProjectActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
 
-                            String project_id = project.getUuid();
+                            String project_id = project.getProject_id();
                             String uuid = FirebaseAuth.getInstance().getUid();
                             String name = Name.getText().toString();
                             String description = Description.getText().toString();
@@ -224,7 +224,7 @@ public class AddProjectActivity extends AppCompatActivity {
             });
         }
         else {
-            String project_id = project.getUuid();
+            String project_id = project.getProject_id();
             String uuid = FirebaseAuth.getInstance().getUid();
             String name = Name.getText().toString();
             String description = Description.getText().toString();
@@ -234,7 +234,7 @@ public class AddProjectActivity extends AppCompatActivity {
             String profile_url = project.getProject_url();
 
             final Project proj = new Project(gd, project_id, uuid, name, description, profile_url);
-            FirebaseFirestore.getInstance().collection("projects").document(project.getUuid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            FirebaseFirestore.getInstance().collection("projects").document(project.getProject_id()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     FirebaseFirestore.getInstance().collection("projects").document(proj.getProject_id()).set(proj).addOnSuccessListener(new OnSuccessListener<Void>() {
