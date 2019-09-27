@@ -23,8 +23,9 @@
         android:layout_height="59dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/bg_button__img_rounded"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/rv_main_activity"
         app:layout_constraintEnd_toEndOf="@+id/btn_projects"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/btn_projects" />
 
     <Button

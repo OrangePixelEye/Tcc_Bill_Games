@@ -12,14 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".RegisterActivityMultiple"></activity>
+        <activity android:name=".SearchActivity" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".ProjectDescribedActivity" />
         <activity android:name=".AddProjectActivity" />
         <activity android:name=".ProjectActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".UserActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

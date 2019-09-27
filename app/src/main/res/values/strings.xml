@@ -30,6 +30,11 @@
     <string name="projects">projects</string>
 
     <!--styles for projects-->
+    <string name="search_users_name">By Name</string>
+
+    <!--Search-->
+    <string name="search_main">Search projects</string>
+    <string name="search_users_category">By Category</string>
     <string-array name="games_styles">
         <item>RPG</item>
         <item>Platform</item>
@@ -46,11 +51,6 @@
         <item>Arcade</item>
         <item>Luta</item>
     </string-array>
-
-    <!--Search-->
-    <string name="search_users_name">By Name</string>
-    <string name="search_main">Search projects</string>
-    <string name="search_users_category">By Category</string>
 
     <!--Array for areas-->
     <string-array name="games_array_areas">

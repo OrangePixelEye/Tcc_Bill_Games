@@ -23,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,6 +38,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.xwray.groupie.GroupAdapter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -54,8 +57,10 @@ public class RegisterActivity extends AppCompatActivity {
     private Spinner sp_area;
     private Spinner sp_line;
     private EditText PhoneNumber;
+    private Button add;
 
     private Boolean is_ok;
+    private Boolean is_multiple = false ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         //find view by id
+        add = findViewById(R.id.btn_register_add);
         Email = findViewById(R.id.edit_email_register);
         Username = findViewById(R.id.edittext_username_register);
         Name = findViewById(R.id.edittext_name_register);
@@ -74,12 +80,29 @@ public class RegisterActivity extends AppCompatActivity {
         sp_area = findViewById(R.id.sp_register_area);
         sp_line = findViewById(R.id.sp_register_line);
 
-        //btn will appear when all the form is ok
-        btn_register.setVisibility(View.GONE);
+
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, RegisterActivityMultiple.class);
+                startActivity(intent);
+            }
+        });
+
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreateUser();
+                final String Vemail = Email.getText().toString();
+                final String Vpassword = Password.getText().toString();
+                final String Vname = Name.getText().toString();
+                final String Vusername = Username.getText().toString();
+                //user's data verification
+                is_ok = !Vusername.isEmpty() && !Vname.isEmpty() && !Vemail.isEmpty() && !Vpassword.isEmpty();
+                if(is_ok){
+                    CreateUser();
+                }
+
             }
         });
 
@@ -93,6 +116,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void ArrayConfig() {
         //Arrays adapters
@@ -124,7 +149,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        sp_line.setVisibility(View.GONE);
+                        sp_line.setVisibility(View.INVISIBLE);
                         break;
                     case 1:
                         sp_line.setAdapter(adapterP);
@@ -154,15 +179,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                final String Vemail = Email.getText().toString();
-                final String Vpassword = Password.getText().toString();
-                final String Vname = Name.getText().toString();
-                final String Vusername = Username.getText().toString();
-                //user's data verification
-                is_ok = !Vusername.isEmpty() && !Vname.isEmpty() && !Vemail.isEmpty() && !Vpassword.isEmpty();
-                if(is_ok){
-                    btn_register.setVisibility(View.VISIBLE);
-                }
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -175,7 +192,6 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/"); //this is the data type of the intent return
         startActivityForResult(intent,0);
-
     }
 
     @Override

@@ -156,8 +156,6 @@ public class MainActivity extends AppCompatActivity {
                 for(DocumentSnapshot doc:docs){
                     final Project project = doc.toObject(Project.class);
                     adapter.add(new MainActivity.ProjectItem(project));
-
-
                 }
             }
         });
