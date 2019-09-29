@@ -6,169 +6,187 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity">
-
-    <Button
-        android:id="@+id/btn_selected_photo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/bg_button__img_rounded"
-        app:layout_constraintBottom_toBottomOf="@+id/img_photo"
-        app:layout_constraintEnd_toEndOf="@+id/img_photo"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/img_photo"
-        app:layout_constraintTop_toTopOf="@+id/img_photo"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <EditText
-        android:id="@+id/edit_email_register"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:autofillHints=""
-        android:background="@drawable/bg_edittext_rounded"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="@string/login_email"
-        android:inputType="textEmailAddress"
-        android:paddingLeft="8dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittext_username_register" />
-
-    <EditText
-        android:id="@+id/edit_password_register"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/bg_edittext_rounded"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="@string/login_password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        android:paddingLeft="8dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_email_register" />
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/edittext_name_register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/bg_edittext_rounded"
-        android:ems="10"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:gravity="center"
-        android:hint="@string/register_name"
-        android:inputType="textPersonName"
-        android:paddingLeft="8dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_photo" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/edittext_username_register"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/bg_edittext_rounded"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="@string/register_username"
-        android:inputType="textPersonName"
-        android:paddingLeft="8dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittext_name_register" />
+            <Button
+                android:id="@+id/btn_selected_photo"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_button__img_rounded"
+                app:layout_constraintBottom_toBottomOf="@+id/img_photo"
+                app:layout_constraintEnd_toEndOf="@+id/img_photo"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/img_photo"
+                app:layout_constraintTop_toTopOf="@+id/img_photo"
+                app:layout_constraintVertical_bias="1.0" />
 
-    <EditText
-        android:id="@+id/edtxtRegisterPhoneNumber"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/bg_edittext_rounded"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="Phone Number"
-        android:inputType="textPersonName"
-        android:paddingLeft="8dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_password_register" />
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="0dp"
+                android:layout_height="39dp"
+                android:background="@drawable/bg_button_rounded"
+                android:text="@string/register"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_register" />
 
-    <Spinner
-        android:id="@+id/sp_register_area"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toStartOf="@+id/btn_register_add"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtxtRegisterPhoneNumber" />
+            <Button
+                android:id="@+id/btn_register_add_new"
+                android:layout_width="91dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/sp_register_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/sp_register_area" />
 
-    <Spinner
-        android:id="@+id/sp_register_line"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toStartOf="@+id/btn_register_add"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sp_register_area" />
+            <EditText
+                android:id="@+id/edit_email_register"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:autofillHints=""
+                android:background="@drawable/bg_edittext_rounded"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/login_email"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_username_register" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/img_photo"
-        android:layout_width="142dp"
-        android:layout_height="134dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginBottom="26dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <EditText
+                android:id="@+id/edit_password_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_edittext_rounded"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/login_password"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:paddingLeft="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_email_register" />
 
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="0dp"
-        android:layout_height="39dp"
-        android:background="@drawable/bg_button_rounded"
-        android:text="@string/register"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+            <EditText
+                android:id="@+id/edittext_name_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_edittext_rounded"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/register_name"
+                android:inputType="textPersonName"
+                android:paddingLeft="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_photo" />
 
-    <Button
-        android:id="@+id/btn_register_add"
-        android:layout_width="91dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/sp_register_line"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sp_register_area" />
+            <EditText
+                android:id="@+id/edittext_username_register"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_edittext_rounded"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/register_username"
+                android:inputType="textPersonName"
+                android:paddingLeft="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edittext_name_register" />
+
+            <EditText
+                android:id="@+id/edtxtRegisterPhoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_edittext_rounded"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Phone Number"
+                android:inputType="textPersonName"
+                android:paddingLeft="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_password_register" />
+
+            <Spinner
+                android:id="@+id/sp_register_area"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toStartOf="@+id/btn_register_add_new"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtxtRegisterPhoneNumber" />
+
+            <Spinner
+                android:id="@+id/sp_register_line"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toStartOf="@+id/btn_register_add_new"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sp_register_area" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_register"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sp_register_line" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_photo"
+                android:layout_width="142dp"
+                android:layout_height="134dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginBottom="26dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

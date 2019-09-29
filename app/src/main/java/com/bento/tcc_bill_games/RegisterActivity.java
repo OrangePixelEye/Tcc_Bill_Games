@@ -39,9 +39,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.Item;
+import com.xwray.groupie.ViewHolder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -58,9 +62,14 @@ public class RegisterActivity extends AppCompatActivity {
     private Spinner sp_line;
     private EditText PhoneNumber;
     private Button add;
+    private RecyclerView rv;
+    private GroupAdapter groupAdapter;
 
+    private List<String> areaM,lineM;
     private Boolean is_ok;
-    private Boolean is_multiple = false ;
+    private int how_many_multiple = 0;
+    private Boolean is_multiple = false;
+    private Boolean is_selected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +77,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         //find view by id
-        add = findViewById(R.id.btn_register_add);
         Email = findViewById(R.id.edit_email_register);
         Username = findViewById(R.id.edittext_username_register);
         Name = findViewById(R.id.edittext_name_register);
@@ -79,35 +87,39 @@ public class RegisterActivity extends AppCompatActivity {
         PhoneNumber = findViewById(R.id.edtxtRegisterPhoneNumber);
         sp_area = findViewById(R.id.sp_register_area);
         sp_line = findViewById(R.id.sp_register_line);
-
-
+        add = findViewById(R.id.btn_register_add_new);
+        rv = findViewById(R.id.rv_register);
+        groupAdapter = new GroupAdapter();
+        rv.setAdapter(groupAdapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setVisibility(View.GONE);
+        add.setVisibility(View.GONE);
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, RegisterActivityMultiple.class);
-                startActivity(intent);
+                rv.setVisibility(View.VISIBLE);
+                groupAdapter.add(new MultipleItem());
             }
         });
 
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String Vemail = Email.getText().toString();
-                final String Vpassword = Password.getText().toString();
-                final String Vname = Name.getText().toString();
-                final String Vusername = Username.getText().toString();
-                //user's data verification
-                is_ok = !Vusername.isEmpty() && !Vname.isEmpty() && !Vemail.isEmpty() && !Vpassword.isEmpty();
-                if(is_ok){
-                    CreateUser();
-                }
-
+            final String Vemail = Email.getText().toString();
+            final String Vpassword = Password.getText().toString();
+            final String Vname = Name.getText().toString();
+            final String Vusername = Username.getText().toString();
+            //user's data verification
+            is_ok = !Vusername.isEmpty() && !Vname.isEmpty() && !Vemail.isEmpty() && !Vpassword.isEmpty();
+            if(is_ok){
+                CreateUser();
+                btn_register.setVisibility(View.GONE);
+            }
             }
         });
 
         ArrayConfig();
-
         //event for photo selection
         selected_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,8 +128,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     private void ArrayConfig() {
         //Arrays adapters
@@ -178,8 +188,8 @@ public class RegisterActivity extends AppCompatActivity {
         sp_line.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
+                is_selected = true;
+                add.setVisibility(View.VISIBLE);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -224,7 +234,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-
     private void CreateUser() {
         //get the edit text content
         final String email = Email.getText().toString();
@@ -262,6 +271,23 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
+    private void SaveUserInDatabase(User user){
+        //create a doc reference with the firebaseAuth's id
+        FirebaseFirestore.getInstance().collection("users").document(user.getUuid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void SaveUserInFirebase() {
         //create a name for the user's image
         String filename = UUID.randomUUID().toString();
@@ -281,29 +307,12 @@ public class RegisterActivity extends AppCompatActivity {
                         String profile_url = uri.toString();
                         String name = Name.getText().toString();
 
-                        TextView Area = (TextView)sp_area.getSelectedView();
-                        String area = Area.getText().toString();
-
-                        TextView Line = (TextView)sp_line.getSelectedView();
-                        String line = Line.getText().toString();
                         String phone = "";
                         String email = Email.getText().toString();
 
-                        User user = new User(uid, username, profile_url, name,area,line, phone,email);
-                        //create a doc reference with the firebaseAuth's id
-                        FirebaseFirestore.getInstance().collection("users").document(uid).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                            configureArrayForSave();
+                            User user = new User(uid, username, profile_url, name, phone,email,areaM, lineM);
+                            SaveUserInDatabase(user);
 
                     }
                 });
@@ -316,4 +325,126 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void configureArrayForSave() {
+        areaM = new ArrayList<String>();
+        lineM = new ArrayList<String>();
+        TextView Area = (TextView)sp_area.getSelectedView();
+        String area = Area.getText().toString();
+
+        TextView Line = (TextView)sp_line.getSelectedView();
+        String line = Line.getText().toString();
+        areaM.add(area) ;
+        lineM.add(line);
+        if(is_multiple) {
+            for (int i = 1; i == how_many_multiple; i++) {
+                MultipleItem item = (MultipleItem) groupAdapter.getItem(i);
+                if (0 != item.getSp_area_new().getSelectedItemPosition()) {
+                    areaM.add(item.getSp_area_new().toString());
+                    lineM.add(item.getSp_line_new().toString());
+                }
+            }
+        }
+    }
+
+    private class MultipleItem extends Item<ViewHolder> {
+        private Spinner sp_area_new;
+        private Spinner sp_line_new;
+
+        public Spinner getSp_area_new() {
+            return sp_area_new;
+        }
+
+        public Spinner getSp_line_new() {
+            return sp_line_new;
+        }
+
+        public MultipleItem() {}
+
+        @Override
+        public void bind(@NonNull ViewHolder viewHolder, int position) {
+            sp_area_new = viewHolder.itemView.findViewById(R.id.sp_item_register_area);
+            sp_line_new = viewHolder.itemView.findViewById(R.id.sp_item_register_line);
+
+            ConfigureArray(sp_area_new,sp_line_new);
+        }
+
+        @Override
+        public int getLayout() {
+            return R.layout.item_register_multiple;
+        }
+
+    }
+
+    private void ConfigureArray(Spinner sp_area_new, Spinner sp_line_new) {
+        Spinner area = sp_area_new;
+        final Spinner line = sp_line_new;
+        //Arrays adapters
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.games_array_areas, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterP = ArrayAdapter.createFromResource(this,
+                R.array.games_array_programmer, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterD = ArrayAdapter.createFromResource(this,
+                R.array.games_array_designer, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterA = ArrayAdapter.createFromResource(this,
+                R.array.games_array_artist, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterSA = ArrayAdapter.createFromResource(this,
+                R.array.games_array_sound_master, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //arrays for area selection
+        area.setAdapter(adapter);
+        //spinner for each area
+        area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        line.setVisibility(View.INVISIBLE);
+                        break;
+                    case 1:
+                        line.setAdapter(adapterP);
+                        line.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        line.setAdapter(adapterD);
+                        line.setVisibility(View.VISIBLE);
+                        break;
+                    case 3:
+                        line.setAdapter(adapterA);
+                        line.setVisibility(View.VISIBLE);
+                        break;
+                    case 4:
+                        line.setAdapter(adapterSA);
+                        line.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        //spinner for each line of each area
+        line.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                is_multiple = true;
+                how_many_multiple++;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
 }

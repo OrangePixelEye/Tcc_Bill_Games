@@ -1,6 +1,7 @@
 package com.bento.tcc_bill_games;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class User implements Serializable {
     private String uuid,
@@ -8,33 +9,33 @@ public class User implements Serializable {
             profile_url,
             name,
             email,
-            phone,
-            area,
-            line;
+            phone;
+    private List<String> areaM,lineM;
+
+    public User(){}
+
+    public User(String uuid, String username, String profile_url, String name,String phone, String email,List<String> areaM,List<String> lineM) {
+        this.uuid = uuid;
+        this.username = username;
+        this.profile_url = profile_url;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.areaM = areaM;
+        this.lineM = lineM;
+    }
 
     public String getEmail() {
         return email;
     }
 
-    public User(){}
 
-    public User(String uuid, String username, String profile_url, String name, String area,String line,String phone, String email) {
-        this.uuid = uuid;
-        this.username = username;
-        this.profile_url = profile_url;
-        this.name = name;
-        this.area = area;
-        this.line = line;
-        this.phone = phone;
-        this.email = email;
+    public List<String> getAreaM() {
+        return areaM;
     }
 
-    public String getArea() {
-        return area;
-    }
-
-    public String getLine() {
-        return line;
+    public List<String> getLineM() {
+        return lineM;
     }
 
     public String getPhone() {

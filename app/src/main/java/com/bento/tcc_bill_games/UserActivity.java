@@ -162,12 +162,12 @@ public class UserActivity extends AppCompatActivity {
                             String username = edtxtUserameUser.getText().toString();
                             String url = uri.toString();
                             String name = edtxtNameUser.getText().toString();
-                            String area = user.getArea();
-                            String line = user.getLine();
+                            //String area = user.getArea();
+                            //String line = user.getLine();
                             String phone = user.getPhone();
                             String email = user.getEmail();
 
-                            final User usu = new User(uuid,username,url,name,area,line,phone,email);
+                            /*final User usu = new User(uuid,username,url,name,area,line,phone,email);
                             FirebaseFirestore.getInstance().collection("users").document(usu.getUuid()).delete();
                             FirebaseFirestore.getInstance().collection("users").document(usu.getUuid()).set(usu).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -175,7 +175,7 @@ public class UserActivity extends AppCompatActivity {
                                     Intent intent  = new Intent(UserActivity.this,MainActivity.class);
                                     startActivity(intent);
                                 }
-                            });
+                            });*/
                         }
                     });
                 }
@@ -191,12 +191,12 @@ public class UserActivity extends AppCompatActivity {
                 String username = edtxtUserameUser.getText().toString();
                 String url = user.getProfile_url();
                 String name = edtxtNameUser.getText().toString();
-                String area = user.getArea();
-                String line = user.getLine();
+                //String area = user.getArea();
+                //String line = user.getLine();
                 String phone = user.getPhone();
                 String email = user.getEmail();
 
-                final User usu = new User(uuid,username,url,name,area,line,phone,email);
+                /*final User usu = new User(uuid,username,url,name,area,line,phone,email);
                 FirebaseFirestore.getInstance().collection("users").document(usu.getUuid()).delete();
                 FirebaseFirestore.getInstance().collection("users").document(usu.getUuid()).set(usu).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -204,7 +204,7 @@ public class UserActivity extends AppCompatActivity {
                         Intent intent  = new Intent(UserActivity.this,MainActivity.class);
                         startActivity(intent);
                     }
-               });
+               });*/
             }
         }
 
@@ -250,11 +250,11 @@ public class UserActivity extends AppCompatActivity {
             }else{
                 edtxtNameUser.setText(user.getName());
                 edtxtUserameUser.setText(user.getUsername());
-                txtAreaUser.setText(user.getArea());
+                //txtAreaUser.setText(user.getArea());
                 txtEmailUser.setText(user.getEmail());
-                txtAreaUser.setText(user.getArea());
+                //txtAreaUser.setText(user.getArea());
                 txtTelefoneUser.setText(user.getPhone());
-                txtLine.setText(user.getLine());
+                //txtLine.setText(user.getLine());
 
                 Picasso.get().load(user.getProfile_url()).into(imgUser);
             }
