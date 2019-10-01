@@ -345,9 +345,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                 TextView LineSpinner = (TextView)SpinnerLine.getSelectedView();
                 String StringLineSpinner = LineSpinner.getText().toString();
+                if(!(areaM.contains(StringAreaSpinner) && lineM.contains(StringLineSpinner))){
+                    areaM.add(StringAreaSpinner);
+                    lineM.add(StringLineSpinner);
+                }
 
-                areaM.add(StringAreaSpinner);
-                lineM.add(StringLineSpinner);
             }
 
     }
