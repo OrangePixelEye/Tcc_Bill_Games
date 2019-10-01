@@ -336,28 +336,27 @@ public class RegisterActivity extends AppCompatActivity {
         String line = Line.getText().toString();
         areaM.add(area) ;
         lineM.add(line);
-        if(is_multiple) {
-            for (int i = 1; i == how_many_multiple; i++) {
-                MultipleItem item = (MultipleItem) groupAdapter.getItem(i);
-                if (0 != item.getSp_area_new().getSelectedItemPosition()) {
-                    areaM.add(item.getSp_area_new().toString());
-                    lineM.add(item.getSp_line_new().toString());
-                }
+            for (int i = 0; i < rv.getChildCount(); i++) {
+                View view2 = rv.getLayoutManager().findViewByPosition(i);
+                Spinner SpinnerArea = view2.findViewById(R.id.sp_item_register_area);
+                Spinner SpinnerLine = view2.findViewById(R.id.sp_item_register_line);
+                TextView AreaSpinner = (TextView)SpinnerArea.getSelectedView();
+                String StringAreaSpinner = AreaSpinner.getText().toString();
+
+                TextView LineSpinner = (TextView)SpinnerLine.getSelectedView();
+                String StringLineSpinner = LineSpinner.getText().toString();
+
+                areaM.add(StringAreaSpinner);
+                lineM.add(StringLineSpinner);
             }
-        }
+
     }
+
+
 
     private class MultipleItem extends Item<ViewHolder> {
         private Spinner sp_area_new;
         private Spinner sp_line_new;
-
-        public Spinner getSp_area_new() {
-            return sp_area_new;
-        }
-
-        public Spinner getSp_line_new() {
-            return sp_line_new;
-        }
 
         public MultipleItem() {}
 
