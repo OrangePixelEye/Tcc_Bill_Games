@@ -31,12 +31,14 @@ public class ProjectDescribedActivity extends AppCompatActivity {
     Boolean logic;//true in the main's case and false in the projectActivity's case
     User user;
     Project project;
+    Boolean is_leader = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_described);
 
+        final Resources r = getResources();
         imgProj = findViewById(R.id.imgProjectDescribed);
         txtName = findViewById(R.id.txtProjectDescribedName);
         txtDescription = findViewById(R.id.txtProjectDescribedDescription);
@@ -64,14 +66,20 @@ public class ProjectDescribedActivity extends AppCompatActivity {
                 }
             }
         });
+        if(is_leader) {
+            p_button.setVisibility(View.VISIBLE);
+        }else{
+            p_button.setVisibility(View.GONE);
+        }
 
         p_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProjectDescribedActivity.this, AddProjectActivity.class);
-                intent.putExtra("projectSend",project);
-                intent.putExtra("logic",true);
-                startActivity(intent);
+                    p_button.setText(R.string.project_described_update);
+                    Intent intent = new Intent(ProjectDescribedActivity.this, AddProjectActivity.class);
+                    intent.putExtra("projectSend", project);
+                    intent.putExtra("logic", true);
+                    startActivity(intent);
             }
         });
     }
@@ -116,7 +124,6 @@ public class ProjectDescribedActivity extends AppCompatActivity {
     }
 
     private void configureButton(String id){
-        final Resources r = getResources();
         FirebaseFirestore.getInstance().collection("projects").whereEqualTo("project_id", id).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -125,7 +132,7 @@ public class ProjectDescribedActivity extends AppCompatActivity {
                     final Project project = doc.toObject(Project.class);
                     assert project != null;
                     if(project.getUuid().equals(FirebaseAuth.getInstance().getUid())){
-                        p_button.setText(R.string.project_described_update);
+                        is_leader = true;
                     }
                 }
             }
