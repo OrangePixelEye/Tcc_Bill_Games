@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         btn_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 intent.putExtra("user",  user);
                 startActivity(intent);
             }
@@ -140,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }else{
             verifyAuthentication();
-
         }
     }
 

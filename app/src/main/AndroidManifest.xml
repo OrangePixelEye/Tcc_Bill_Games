@@ -19,7 +19,6 @@
         <activity android:name=".AddProjectActivity" />
         <activity android:name=".ProjectActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".UserActivity" />
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan">

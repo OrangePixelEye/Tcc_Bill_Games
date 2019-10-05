@@ -67,9 +67,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     private List<String> areaM,lineM;
     private Boolean is_ok;
-    private int how_many_multiple = 0;
-    private Boolean is_multiple = false;
+    private Boolean is_updating;
     private Boolean is_selected = false;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
             }
         });
-
+        VerifyUpdate();
         ArrayConfig();
         //event for photo selection
         selected_photo.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +127,35 @@ public class RegisterActivity extends AppCompatActivity {
                 selectPhoto();
             }
         });
+    }
+
+    private void VerifyUpdate() {
+        Bundle extras = getIntent().getExtras();
+        if(extras != null && extras.containsKey("user")){
+            is_updating = true;
+            user = (User) extras.get("user");
+            Name.setText(user.getName());
+            Username.setText(user.getUsername());
+            PhoneNumber.setText(user.getPhone());
+            Email.setText(user.getEmail());
+            Picasso.get().load(user.getProfile_url()).into(mImagePhoto);
+            btn_register.setText(R.string.project_described_update);
+            switch (user.getAreaM().get(0)){
+                case "Artist":
+
+                    break;
+                case "Programmer":
+                    break;
+                case "Designer":
+
+                case "Sound":
+
+                default:
+                    throw new IllegalStateException("Unexpected value: " + user.getAreaM().get(0));
+            }
+
+
+        }
     }
 
     private void ArrayConfig() {
@@ -307,7 +336,7 @@ public class RegisterActivity extends AppCompatActivity {
                         String profile_url = uri.toString();
                         String name = Name.getText().toString();
 
-                        String phone = "";
+                        String phone = PhoneNumber.getText().toString();
                         String email = Email.getText().toString();
 
                             configureArrayForSave();
@@ -349,12 +378,8 @@ public class RegisterActivity extends AppCompatActivity {
                     areaM.add(StringAreaSpinner);
                     lineM.add(StringLineSpinner);
                 }
-
             }
-
     }
-
-
 
     private class MultipleItem extends Item<ViewHolder> {
         private Spinner sp_area_new;
@@ -438,8 +463,7 @@ public class RegisterActivity extends AppCompatActivity {
         line.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                is_multiple = true;
-                how_many_multiple++;
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
