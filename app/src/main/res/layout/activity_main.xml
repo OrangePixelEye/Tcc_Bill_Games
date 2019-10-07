@@ -50,7 +50,7 @@
     <EditText
         android:id="@+id/SearchBar"
         android:layout_width="263dp"
-        android:layout_height="41dp"
+        android:layout_height="wrap_content"
         android:hint="@string/search_main"
         android:layout_marginStart="16dp"
         android:layout_marginTop="28dp"
@@ -89,5 +89,15 @@
         app:layout_constraintStart_toStartOf="@+id/btn_projects"
         app:layout_constraintTop_toTopOf="@+id/btn_projects"
         android:background="@mipmap/project_icon" />
+
+    <Button
+        android:id="@+id/btn_main_notification"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/bg_button__img_rounded"
+        android:layout_marginTop="45dp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_projects"
+        app:layout_constraintStart_toStartOf="@+id/btn_projects"
+        app:layout_constraintTop_toBottomOf="@+id/btn_projects" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

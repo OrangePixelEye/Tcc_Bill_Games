@@ -1,5 +1,6 @@
 package com.bento.tcc_bill_games;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -62,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Spinner sp_line;
     private EditText PhoneNumber;
     private Button add;
+    private Button delete;
     private RecyclerView rv;
     private GroupAdapter groupAdapter;
 
@@ -77,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         //find view by id
+        delete = findViewById(R.id.btn_register_delete);
         Email = findViewById(R.id.edit_email_register);
         Username = findViewById(R.id.edittext_username_register);
         Name = findViewById(R.id.edittext_name_register);
@@ -89,11 +93,13 @@ public class RegisterActivity extends AppCompatActivity {
         sp_line = findViewById(R.id.sp_register_line);
         add = findViewById(R.id.btn_register_add_new);
         rv = findViewById(R.id.rv_register);
+
         groupAdapter = new GroupAdapter();
         rv.setAdapter(groupAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setVisibility(View.GONE);
         add.setVisibility(View.GONE);
+        delete.setVisibility(View.GONE);
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,20 +146,49 @@ public class RegisterActivity extends AppCompatActivity {
             Email.setText(user.getEmail());
             Picasso.get().load(user.getProfile_url()).into(mImagePhoto);
             btn_register.setText(R.string.project_described_update);
-            switch (user.getAreaM().get(0)){
-                case "Artist":
+            delete.setVisibility(View.VISIBLE);
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DeleteUser();
+                }
 
-                    break;
-                case "Programmer":
-                    break;
-                case "Designer":
+                private void DeleteUser() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
 
-                case "Sound":
-
-                default:
-                    throw new IllegalStateException("Unexpected value: " + user.getAreaM().get(0));
-            }
-
+                    builder.setTitle("Deletar conta?");
+                    builder.setMessage("Deseja deletar sua conta permanentemente?");
+                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(RegisterActivity.this, "Usuario deletado", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    });
+                    builder.setNegativeButton("Não Mano", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            recreate();
+                        }
+                    });
+                    final AlertDialog delete_account = builder.create();
+                    delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            delete_account.show();
+                        }
+                    });
+                }
+            });
+           String area = user.getAreaM().get(0);
+           String generalArea ="games_array_"+ area;
 
         }
     }

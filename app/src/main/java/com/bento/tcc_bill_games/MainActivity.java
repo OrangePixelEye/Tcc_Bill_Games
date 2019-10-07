@@ -2,6 +2,7 @@ package com.bento.tcc_bill_games;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_logout;
     private GroupAdapter adapter;
     private EditText search_bar;
-    private Button back;
+   private Button btn_notifications;
+
     User user;
 
 
@@ -48,17 +50,27 @@ public class MainActivity extends AppCompatActivity {
         LoginUser();
 
         btn_search = findViewById(R.id.btn_search);
+        btn_notifications = findViewById(R.id.btn_main_notification);
         btn_user = findViewById(R.id.btn_user_profile);
         btn_projects = findViewById(R.id.btn_projects);
         btn_projects.getBackground().setAlpha(0);
         btn_logout = findViewById(R.id.btn_logout);
         search_bar = findViewById(R.id.SearchBar);
         RecyclerView rv = findViewById(R.id.rv_main_activity);
-
+        btn_notifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,InterestActivity.class);
+                startActivity(intent);
+            }
+        });
         adapter = new GroupAdapter();
+
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
+        rv.addItemDecoration(new DividerItemDecoration(rv.getContext(),
+                DividerItemDecoration.VERTICAL));
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull Item item, @NonNull View view) {

@@ -50,6 +50,13 @@ public class ProfileActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,37 +119,5 @@ public class ProfileActivity extends AppCompatActivity {
             return R.layout.item_profile_categories;
         }
     }
-    /*
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Deletar conta?");
-        builder.setMessage("Deseja deletar sua conta permanentemente?");
-        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(ProfileActivity.this, "Usuario deletado", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
-                });
-            }
-        });
-        builder.setNegativeButton("Não Mano", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                recreate();
-            }
-        });
-        delete_account = builder.create();
-         delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                delete_account.show();
-            }
-        });
- */
 }

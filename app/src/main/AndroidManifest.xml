@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".RegisterActivityMultiple"></activity>
+        <activity android:name=".InterestActivity"></activity>
+        <activity android:name=".RegisterActivityMultiple" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".ProjectDescribedActivity" />
