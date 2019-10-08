@@ -134,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void LoginUser(){
-
         String doc = FirebaseAuth.getInstance().getUid();
         if(doc != null) {
             FirebaseFirestore.getInstance().collection("users").document(doc).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

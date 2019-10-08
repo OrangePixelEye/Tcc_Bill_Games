@@ -66,12 +66,8 @@ public class ProjectDescribedActivity extends AppCompatActivity {
                 }
             }
         });
-        if(is_leader) {
-            p_button.setVisibility(View.VISIBLE);
-        }else{
-            p_button.setVisibility(View.GONE);
-        }
 
+        p_button.setVisibility(View.INVISIBLE);
         p_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,8 +127,8 @@ public class ProjectDescribedActivity extends AppCompatActivity {
                 for(DocumentSnapshot doc:docs){
                     final Project project = doc.toObject(Project.class);
                     assert project != null;
-                    if(project.getUuid().equals(FirebaseAuth.getInstance().getUid())){
-                        is_leader = true;
+                    if(project.getUuid().equals(user.getUuid())){
+                        p_button.setVisibility(View.VISIBLE);
                     }
                 }
             }
