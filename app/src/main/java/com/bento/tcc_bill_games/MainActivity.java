@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,6 +23,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
@@ -180,16 +183,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void bind(@NonNull ViewHolder viewHolder, int position) {
-            TextView txt_username = viewHolder.itemView.findViewById(R.id.txtItemProjectName);
-            TextView txt_description = viewHolder.itemView.findViewById(R.id.txtItemProjectDescription);
+            TextView txt_username = viewHolder.itemView.findViewById(R.id.textView2);
+            ImageView img = viewHolder.itemView.findViewById(R.id.imageView3);
             txt_username.setText(p.getName());
-            txt_description.setText(p.getDescription());
+            txt_username.setTypeface(Typeface.DEFAULT_BOLD);
+            Picasso.get().load(p.getProject_url()).into(img);
         }
 
 
         @Override
         public int getLayout() {
-            return R.layout.item_project;
+            return R.layout.item_main;
         }
 
     }

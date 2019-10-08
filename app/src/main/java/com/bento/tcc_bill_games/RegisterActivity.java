@@ -147,44 +147,37 @@ public class RegisterActivity extends AppCompatActivity {
             Picasso.get().load(user.getProfile_url()).into(mImagePhoto);
             btn_register.setText(R.string.project_described_update);
             delete.setVisibility(View.VISIBLE);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+
+            builder.setTitle("Deletar conta?");
+            builder.setMessage("Deseja deletar sua conta permanentemente?");
+            builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(RegisterActivity.this, "Usuario deletado", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            });
+            builder.setNegativeButton("Não Mano", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    recreate();
+                }
+            });
+            final AlertDialog delete_account = builder.create();
+
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DeleteUser();
-                }
-
-                private void DeleteUser() {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-
-                    builder.setTitle("Deletar conta?");
-                    builder.setMessage("Deseja deletar sua conta permanentemente?");
-                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(RegisterActivity.this, "Usuario deletado", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                }
-                            });
-                        }
-                    });
-                    builder.setNegativeButton("Não Mano", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            recreate();
-                        }
-                    });
-                    final AlertDialog delete_account = builder.create();
-                    delete.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            delete_account.show();
-                        }
-                    });
+                    delete_account.show();
                 }
             });
            String area = user.getAreaM().get(0);
