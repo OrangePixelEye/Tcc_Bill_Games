@@ -120,7 +120,7 @@ public class ProjectDescribedActivity extends AppCompatActivity {
     }
 
     private void configureButton(String id){
-        FirebaseFirestore.getInstance().collection("projects").whereEqualTo("project_id", id).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("projects").whereEqualTo("project_id", id).orderBy("date_added").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();

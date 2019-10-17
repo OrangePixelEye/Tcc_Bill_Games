@@ -29,6 +29,8 @@ import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -129,11 +131,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void verifyAuthentication() {
-        if (FirebaseAuth.getInstance().getUid() == null) {
+
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }
+
     }
 
     private void LoginUser(){
@@ -144,6 +146,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     if(documentSnapshot != null) {
                         user = documentSnapshot.toObject(User.class);
+                        if(user == null){
+                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
                     }
                     else{
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -158,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchProjects() {
-        FirebaseFirestore.getInstance().collection("projects").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("projects").orderBy("date_added").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if(e != null){

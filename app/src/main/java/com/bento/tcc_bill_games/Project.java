@@ -9,23 +9,19 @@ public class Project implements Serializable {
     private String gd;
     private String description;
     private String project_url;
-
-    public String getProject_url() {
-        return this.project_url;
-    }
-
-
+    private String date_added;
 
     public Project() {
     }
 
-    public Project(String GameCategory, String project_id, String uuid, String name, String description,String project_url) {
+    public Project(String GameCategory, String project_id, String uuid, String name, String description,String project_url,String date) {
         this.gd = GameCategory;
         this.project_id = project_id;
         this.uuid = uuid;
         this.name = name;
         this.description = description;
         this.project_url = project_url;
+        this.date_added = date;
     }
     public String getProject_id() {
         return this.project_id;
@@ -46,4 +42,12 @@ public class Project implements Serializable {
     public String getGd() {
         return this.gd;
     }
+
+    public String getDate_added(){return this.date_added;}
+
+    public String getProject_url() {
+        return this.project_url;
+    }
+
+
 }

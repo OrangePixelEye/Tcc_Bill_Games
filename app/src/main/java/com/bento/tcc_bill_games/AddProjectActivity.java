@@ -35,6 +35,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 public class AddProjectActivity extends AppCompatActivity {
@@ -183,6 +185,7 @@ public class AddProjectActivity extends AppCompatActivity {
     }
 
     private void UpdateProject(){
+        final String date = project.getDate_added();
         if(is_new_photo){
             String filename = UUID.randomUUID().toString();
             final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + filename);
@@ -202,7 +205,7 @@ public class AddProjectActivity extends AppCompatActivity {
                             String gd = Line.getText().toString();
                             String profile_url = uri.toString();
 
-                            final Project proj = new Project(gd, project_id, uuid, name, description, profile_url);
+                            final Project proj = new Project(gd, project_id, uuid, name, description, profile_url,date);
                             FirebaseFirestore.getInstance().collection("projects").document(project.getProject_id()).delete();
                             FirebaseFirestore.getInstance().collection("projects").document(proj.getProject_id()).set(proj).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -233,7 +236,8 @@ public class AddProjectActivity extends AppCompatActivity {
             String gd = Line.getText().toString();
             String profile_url = project.getProject_url();
 
-            final Project proj = new Project(gd, project_id, uuid, name, description, profile_url);
+
+            final Project proj = new Project(gd, project_id, uuid, name, description, profile_url,date);
             FirebaseFirestore.getInstance().collection("projects").document(project.getProject_id()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -271,7 +275,9 @@ public class AddProjectActivity extends AppCompatActivity {
                         String gd = Line.getText().toString();
                         String profile_url = uri.toString();
 
-                        Project proj = new Project(gd, project_id, uuid, name, description, profile_url);
+                        Date currentTime = Calendar.getInstance().getTime();
+
+                        Project proj = new Project(gd, project_id, uuid, name, description, profile_url,currentTime.toString());
 
 
                         FirebaseFirestore.getInstance().collection("projects").document(proj.getProject_id()).set(proj).addOnSuccessListener(new OnSuccessListener<Void>() {
