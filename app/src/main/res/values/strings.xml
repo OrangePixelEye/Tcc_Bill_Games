@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">Bill Games</string>
+
     <!--Add Projects -->
     <string name="add_projects_name">project"s name</string>
     <string name="add_projects_description">project"s description</string>
+
     <!--project described-->
     <string name="project_described_update">Update</string>
+    <string name="project_described_join">Want to join</string>
+
     <!--login strings-->
     <string name="login_button">Login</string>
     <string name="login_email">Email</string>
@@ -69,15 +73,18 @@
     <string-array name="games_array_sound_master">
         <item>Engenheiro de som</item>
     </string-array>
+
     <string-array name="games_array_artist">
         <item>Animador</item>
         <item>Roteirista</item>
         <item>Concept Artist</item>
     </string-array>
+
     <string-array name="games_array_designer">
         <item>Game Designer</item>
         <item>Mobile</item>
     </string-array>
+
     <string-array name="games_array_programmer">
         <item>Level Designer</item>
         <item>Servidor</item>

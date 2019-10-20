@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".InterestActivity"></activity>
+        <activity android:name=".InterestActivity" />
         <activity android:name=".RegisterActivityMultiple" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".ChatActivity" />

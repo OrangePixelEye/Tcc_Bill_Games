@@ -48,18 +48,19 @@ public class SearchActivity extends AppCompatActivity {
 
     private Switch sw;
     private TextView proj;
-    private TextView user;
+    private TextView txt_user;
     private Button research;
     private GroupAdapter adapter;
     private EditText research_text;
     private RadioGroup rg;
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         //UI
         proj = findViewById(R.id.txt_search_projects);
-        user = findViewById(R.id.txt_search_users);
+        txt_user = findViewById(R.id.txt_search_users);
         sw = findViewById(R.id.sw_search);
         research = findViewById(R.id.btn_search_search);
         research_text = findViewById(R.id.edtxt_search_search);
@@ -102,14 +103,14 @@ public class SearchActivity extends AppCompatActivity {
                     }
                     rg.setVisibility(View.VISIBLE);
                     is_u_bold=true;
-                    user.setTypeface(null, Typeface.BOLD);
+                    txt_user.setTypeface(null, Typeface.BOLD);
 
                     fetchUsers();
 
                 }else{
                     adapter.clear();
                     if(is_u_bold) {
-                        user.setTypeface(null, Typeface.NORMAL);
+                        txt_user.setTypeface(null, Typeface.NORMAL);
                         is_u_bold = false;
                         rg.setVisibility(View.GONE);
                     }
@@ -184,6 +185,7 @@ public class SearchActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         String a;
         if(extras!= null && extras.containsKey("search") ) {
+            user = (User) extras.get("user");
             a = (String) extras.get("search");
             if(a.equals("")) {
                 Intent intent = new Intent(SearchActivity.this, MainActivity.class);

@@ -75,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         if(extras!= null && extras.containsKey("user") ) {
             user = (User) extras.get("user");
-            if(user.getName().equals("")) {
+            if(user == null) {
                 Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
                 startActivity(intent);
             }else{

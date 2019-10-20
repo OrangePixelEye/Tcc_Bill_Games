@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,8 +30,6 @@ import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -43,10 +42,11 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_logout;
     private GroupAdapter adapter;
     private EditText search_bar;
-   private Button btn_notifications;
+    private Button btn_notifications;
+    private ProgressBar loading_screen;
+    RecyclerView rv;
 
     User user;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         LoginUser();
 
+        loading_screen = findViewById(R.id.progress_main_screen);
         btn_search = findViewById(R.id.btn_search);
         btn_notifications = findViewById(R.id.btn_main_notification);
         btn_user = findViewById(R.id.btn_user_profile);
@@ -61,11 +62,15 @@ public class MainActivity extends AppCompatActivity {
         btn_projects.getBackground().setAlpha(0);
         btn_logout = findViewById(R.id.btn_logout);
         search_bar = findViewById(R.id.SearchBar);
-        RecyclerView rv = findViewById(R.id.rv_main_activity);
+        rv = findViewById(R.id.rv_main_activity);
+
+        hideEverything();
+
         btn_notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,InterestActivity.class);
+                intent.putExtra("user",user);
                 startActivity(intent);
             }
         });
@@ -73,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
 
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
-
         rv.addItemDecoration(new DividerItemDecoration(rv.getContext(),
                 DividerItemDecoration.VERTICAL));
+
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull Item item, @NonNull View view) {
@@ -85,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
                 intent.putExtra("projectSend", projItem.p);
                 intent.putExtra("logic",true);
+                intent.putExtra("user",user);
 
                 startActivity(intent);
             }
@@ -97,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 final String search = search_bar.getText().toString();
                 intent.putExtra("search",search);
+                intent.putExtra("user",user);
                 startActivity(intent);
             }
         });
@@ -128,14 +135,34 @@ public class MainActivity extends AppCompatActivity {
         });
 
         fetchProjects();
+
+    }
+
+    private void showEverything() {
+        btn_search.setVisibility(View.VISIBLE);
+        btn_notifications.setVisibility(View.VISIBLE);
+        btn_user.setVisibility(View.VISIBLE);
+        btn_projects.setVisibility(View.VISIBLE);
+        btn_logout.setVisibility(View.VISIBLE);
+        search_bar.setVisibility(View.VISIBLE);
+        rv.setVisibility(View.VISIBLE);
+        loading_screen.setVisibility(View.GONE);
+    }
+
+    private void hideEverything() {
+        btn_search.setVisibility(View.GONE);
+        btn_notifications.setVisibility(View.GONE);
+        btn_user.setVisibility(View.GONE);;
+        btn_projects.setVisibility(View.GONE);
+        btn_logout.setVisibility(View.GONE);
+        search_bar.setVisibility(View.GONE);
+        rv.setVisibility(View.GONE);
     }
 
     private void verifyAuthentication() {
-
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void LoginUser(){
@@ -144,19 +171,15 @@ public class MainActivity extends AppCompatActivity {
             FirebaseFirestore.getInstance().collection("users").document(doc).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot != null) {
-                        user = documentSnapshot.toObject(User.class);
-                        if(user == null){
-                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
+                if(documentSnapshot != null) {
+                    user = documentSnapshot.toObject(User.class);
+                    if(user == null){
+                        verifyAuthentication();
                     }
-                    else{
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
+                }
+                else{
+                    verifyAuthentication();
+                }
                 }
             });
         }else{
@@ -177,8 +200,10 @@ public class MainActivity extends AppCompatActivity {
                     final Project project = doc.toObject(Project.class);
                     adapter.add(new MainActivity.ProjectItem(project));
                 }
+                showEverything();
             }
         });
+
     }
 
     private class ProjectItem extends Item<ViewHolder>{

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,17 +31,24 @@ public class ProjectActivity extends AppCompatActivity {
     private Button btn_new_project;
     private GroupAdapter adapter;
     private Button back;
+    private ProgressBar progressBar;
+    private RecyclerView rv;
     User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
+
         LoginUser();
         //UI references
         back = findViewById(R.id.btn_project_back);
         btn_new_project = findViewById(R.id.btn_new_project);
-        RecyclerView rv = findViewById(R.id.rv_projects);
+        rv = findViewById(R.id.rv_projects);
+        rv.setVisibility(View.INVISIBLE);
+
+        progressBar = findViewById(R.id.progress_project_screen);
+
 
         adapter = new GroupAdapter();
         rv.setAdapter(adapter);
@@ -86,21 +94,10 @@ public class ProjectActivity extends AppCompatActivity {
     }
 
     private void LoginUser() {
+        Bundle extras = getIntent().getExtras();
 
-        String doc = FirebaseAuth.getInstance().getUid();
-        if (doc != null) {
-            FirebaseFirestore.getInstance().collection("users").document(doc).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (documentSnapshot != null) {
-                        user = documentSnapshot.toObject(User.class);
-                    } else {
-                        Intent intent = new Intent(ProjectActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
-                }
-            });
+        if(extras!= null && extras.containsKey("user") ) {
+            user = (User) extras.get("user");
         }
     }
 
@@ -109,13 +106,15 @@ public class ProjectActivity extends AppCompatActivity {
         FirebaseFirestore.getInstance().collection("projects").whereEqualTo("uuid",FirebaseAuth.getInstance().getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                for(DocumentSnapshot doc:docs){
-                    final Project project = doc.toObject(Project.class);
-                    adapter.add(new ProjectItem(project));
-                }
+            List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+            for(DocumentSnapshot doc:docs){
+                final Project project = doc.toObject(Project.class);
+                adapter.add(new ProjectItem(project));
+            }
             }
         });
+        rv.setVisibility(View.VISIBLE);
+
     }
 
     private class ProjectItem extends Item<ViewHolder>{
@@ -131,6 +130,7 @@ public class ProjectActivity extends AppCompatActivity {
             TextView txt_description = viewHolder.itemView.findViewById(R.id.txtItemProjectDescription);
             txt_username.setText(p.getName());
             txt_description.setText(p.getDescription());
+            progressBar.setVisibility(View.GONE);
         }
 
 
