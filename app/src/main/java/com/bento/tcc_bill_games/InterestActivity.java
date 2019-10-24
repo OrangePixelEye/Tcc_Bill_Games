@@ -79,7 +79,7 @@ public class InterestActivity extends AppCompatActivity {
     }
 
     private void fetchInterest() {
-        FirebaseFirestore.getInstance().collection("user").document(user.getUuid()).collection("interest").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("users").document(user.getUuid()).collection("interest").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if(e != null){
@@ -106,7 +106,7 @@ public class InterestActivity extends AppCompatActivity {
         }
 
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull final ViewHolder viewHolder, int position) {
             TextView txt_username = viewHolder.itemView.findViewById(R.id.txt_item_interest);
             TextView txt_project = viewHolder.itemView.findViewById(R.id.txt_item_interest_project);
 
@@ -116,10 +116,11 @@ public class InterestActivity extends AppCompatActivity {
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FirebaseFirestore.getInstance().collection("projects").document(interest.getProj_id()).collection("interest").add(interest).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    FirebaseFirestore.getInstance().collection("projects").document(interest.getProj_id()).collection("help").add(interest).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Toast.makeText(InterestActivity.this,"OK", Toast.LENGTH_SHORT).show();
+
                         }
                     });
                 }

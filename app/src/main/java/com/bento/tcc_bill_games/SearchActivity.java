@@ -209,6 +209,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void fetchProjects() {
+
         FirebaseFirestore.getInstance().collection("projects").whereEqualTo("name", s).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

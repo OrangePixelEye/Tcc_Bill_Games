@@ -106,6 +106,7 @@ public class ProjectDescribedActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             sendRequest();
+                            p_button.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -118,7 +119,7 @@ public class ProjectDescribedActivity extends AppCompatActivity {
 
     private void sendRequest() {
          Interest interest = new Interest(user.getUuid(),user.getName(),project.getProject_id(),project.getName());
-         FirebaseFirestore.getInstance().collection("user").document(project.getUuid()).collection("interest").add(interest).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+         FirebaseFirestore.getInstance().collection("users").document(project.getUuid()).collection("interest").add(interest).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
              @Override
              public void onSuccess(DocumentReference documentReference) {
                  Toast.makeText(ProjectDescribedActivity.this, "Solicitação enviada", Toast.LENGTH_SHORT).show();

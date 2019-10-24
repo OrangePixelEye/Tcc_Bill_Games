@@ -276,9 +276,8 @@ public class AddProjectActivity extends AppCompatActivity {
                         String profile_url = uri.toString();
 
                         Date currentTime = Calendar.getInstance().getTime();
-
-                        Project proj = new Project(gd, project_id, uuid, name, description, profile_url,currentTime.toString());
-
+                        String cDate = "-" + currentTime.toString();
+                        Project proj = new Project(gd, project_id, uuid, name, description, profile_url,cDate);
 
                         FirebaseFirestore.getInstance().collection("projects").document(proj.getProject_id()).set(proj).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
