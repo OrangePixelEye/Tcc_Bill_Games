@@ -3,6 +3,8 @@ package com.bento.tcc_bill_games;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -32,6 +34,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.Item;
+import com.xwray.groupie.ViewHolder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -51,6 +56,10 @@ public class AddProjectActivity extends AppCompatActivity {
     private TextView txt;
     private Button delete;
     private Button back;
+    private RecyclerView rv;
+    private GroupAdapter groupAdapter;
+    private Button add_need;
+
     boolean is_new_photo = false;
     boolean is_updating = false;
     boolean logic = false;
@@ -80,6 +89,18 @@ public class AddProjectActivity extends AppCompatActivity {
         back = findViewById(R.id.btn_add_project_back);
         delete = findViewById(R.id.btn_delete_project);
         delete.setVisibility(View.GONE);
+        rv = findViewById(R.id.rv_add_project);
+        groupAdapter = new GroupAdapter();
+        rv.setAdapter(groupAdapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        add_need = findViewById(R.id.btn_add_project_need);
+
+        add_need.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                groupAdapter.add(new MultipleItem());
+            }
+        });
 
         verifyUpdate();
 
@@ -349,4 +370,94 @@ public class AddProjectActivity extends AppCompatActivity {
         }
     }
 
+    private class MultipleItem extends Item<ViewHolder> {
+        private Spinner sp_area_new;
+        private Spinner sp_line_new;
+
+        public MultipleItem() {
+        }
+
+        @Override
+        public void bind(@NonNull ViewHolder viewHolder, int position) {
+            sp_area_new = viewHolder.itemView.findViewById(R.id.sp_item_register_area);
+            sp_line_new = viewHolder.itemView.findViewById(R.id.sp_item_register_line);
+
+            ConfigureArray(sp_area_new, sp_line_new);
+        }
+
+        @Override
+        public int getLayout() {
+            return R.layout.item_register_multiple;
+        }
+    }
+
+        private void ConfigureArray(Spinner sp_area_new, Spinner sp_line_new) {
+            Spinner area = sp_area_new;
+            final Spinner line = sp_line_new;
+            //Arrays adapters
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.games_array_areas, android.R.layout.simple_spinner_dropdown_item);
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            final ArrayAdapter<CharSequence> adapterP = ArrayAdapter.createFromResource(this,
+                    R.array.games_array_programmer, android.R.layout.simple_spinner_item);
+            adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            final ArrayAdapter<CharSequence> adapterD = ArrayAdapter.createFromResource(this,
+                    R.array.games_array_designer, android.R.layout.simple_spinner_item);
+            adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            final ArrayAdapter<CharSequence> adapterA = ArrayAdapter.createFromResource(this,
+                    R.array.games_array_artist, android.R.layout.simple_spinner_item);
+            adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            final ArrayAdapter<CharSequence> adapterSA = ArrayAdapter.createFromResource(this,
+                    R.array.games_array_sound_master, android.R.layout.simple_spinner_item);
+            adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            //arrays for area selection
+            area.setAdapter(adapter);
+            //spinner for each area
+            area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch (position){
+                        case 0:
+                            line.setVisibility(View.INVISIBLE);
+                            break;
+                        case 1:
+                            line.setAdapter(adapterP);
+                            line.setVisibility(View.VISIBLE);
+                            break;
+                        case 2:
+                            line.setAdapter(adapterD);
+                            line.setVisibility(View.VISIBLE);
+                            break;
+                        case 3:
+                            line.setAdapter(adapterA);
+                            line.setVisibility(View.VISIBLE);
+                            break;
+                        case 4:
+                            line.setAdapter(adapterSA);
+                            line.setVisibility(View.VISIBLE);
+                            break;
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            //spinner for each line of each area
+            line.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+    }
 }
