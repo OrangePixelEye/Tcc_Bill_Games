@@ -53,7 +53,6 @@ public class AddProjectActivity extends AppCompatActivity {
     private EditText Description;
     private Uri mSelectedUri;
     private Spinner sp;
-    private TextView txt;
     private Button delete;
     private Button back;
     private RecyclerView rv;
@@ -79,7 +78,7 @@ public class AddProjectActivity extends AppCompatActivity {
         Name = findViewById(R.id.etAddProjectName);
         Description = findViewById(R.id.etProjectsDescription);
         sp = findViewById(R.id.sp_add_projects);
-        txt = findViewById(R.id.txtErrorAddProject);
+
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +117,6 @@ public class AddProjectActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 final Resources r = getResources();
-                txt.setText(r.getString(R.string.add_projects_add_category));
 
             }
         });
@@ -131,10 +129,9 @@ public class AddProjectActivity extends AppCompatActivity {
                 createProj.setVisibility(View.GONE);
                 if(is_updating){
                     UpdateProject();
-                    txt.setText(res.getString(R.string.error_register_loading));}
+                }
                 else {
                     createProject();
-                    txt.setText(res.getString(R.string.error_register_loading));
                 }
             }
         });

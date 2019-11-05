@@ -114,6 +114,7 @@ public class ProjectActivity extends AppCompatActivity {
             }
         });
         rv.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
 
     }
 
