@@ -40,8 +40,10 @@ import com.xwray.groupie.ViewHolder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class AddProjectActivity extends AppCompatActivity {
@@ -62,6 +64,7 @@ public class AddProjectActivity extends AppCompatActivity {
     boolean is_new_photo = false;
     boolean is_updating = false;
     boolean logic = false;
+    private List<String> areaM,lineM;
     User user;
     Project project;
 
@@ -138,6 +141,26 @@ public class AddProjectActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void configureArrayForSave() {
+        areaM = new ArrayList<String>();
+        lineM = new ArrayList<String>();
+
+        for (int i = 0; i < rv.getChildCount(); i++) {
+            View view2 = rv.getLayoutManager().findViewByPosition(i);
+            Spinner SpinnerArea = view2.findViewById(R.id.sp_item_register_area);
+            Spinner SpinnerLine = view2.findViewById(R.id.sp_item_register_line);
+            TextView AreaSpinner = (TextView)SpinnerArea.getSelectedView();
+            String StringAreaSpinner = AreaSpinner.getText().toString();
+
+            TextView LineSpinner = (TextView)SpinnerLine.getSelectedView();
+            String StringLineSpinner = LineSpinner.getText().toString();
+            if(!(areaM.contains(StringAreaSpinner) && lineM.contains(StringLineSpinner))){
+                areaM.add(StringAreaSpinner);
+                lineM.add(StringLineSpinner);
+            }
+        }
     }
 
     private void verifyUpdate() {
@@ -223,7 +246,8 @@ public class AddProjectActivity extends AppCompatActivity {
                             String gd = Line.getText().toString();
                             String profile_url = uri.toString();
 
-                            final Project proj = new Project(gd, project_id, uuid, name, description, profile_url,date);
+                            configureArrayForSave();
+                            final Project proj = new Project(gd, project_id, uuid, name, description, profile_url,date,areaM,lineM);
                             FirebaseFirestore.getInstance().collection("projects").document(project.getProject_id()).delete();
                             FirebaseFirestore.getInstance().collection("projects").document(proj.getProject_id()).set(proj).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -254,8 +278,8 @@ public class AddProjectActivity extends AppCompatActivity {
             String gd = Line.getText().toString();
             String profile_url = project.getProject_url();
 
-
-            final Project proj = new Project(gd, project_id, uuid, name, description, profile_url,date);
+            configureArrayForSave();
+            final Project proj = new Project(gd, project_id, uuid, name, description, profile_url,date,areaM,lineM);
             FirebaseFirestore.getInstance().collection("projects").document(project.getProject_id()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -295,7 +319,8 @@ public class AddProjectActivity extends AppCompatActivity {
 
                         Date currentTime = Calendar.getInstance().getTime();
                         String cDate = "-" + currentTime.toString();
-                        Project proj = new Project(gd, project_id, uuid, name, description, profile_url,cDate);
+                        configureArrayForSave();
+                        Project proj = new Project(gd, project_id, uuid, name, description, profile_url,cDate,areaM,lineM);
 
                         FirebaseFirestore.getInstance().collection("projects").document(proj.getProject_id()).set(proj).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
