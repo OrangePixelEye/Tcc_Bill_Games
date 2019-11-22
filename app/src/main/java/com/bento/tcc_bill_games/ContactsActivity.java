@@ -18,8 +18,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
-import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class ContactsActivity extends AppCompatActivity {
         });
     }
 
-    private class UserItem extends Item<ViewHolder> {
+    private class UserItem extends Item<GroupieViewHolder> {
         private User user;
 
         public UserItem(User user) {
@@ -64,7 +64,7 @@ public class ContactsActivity extends AppCompatActivity {
         }
 
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
             TextView txt_username = viewHolder.itemView.findViewById(R.id.textView);
             ImageView imgPhoto = viewHolder.itemView.findViewById(R.id.imageView);
             txt_username.setText(user.getName());

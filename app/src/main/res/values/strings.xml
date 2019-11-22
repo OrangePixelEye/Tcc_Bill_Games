@@ -8,6 +8,7 @@
     <!--project described-->
     <string name="project_described_update">Update</string>
     <string name="project_described_join">Want to join</string>
+    <string name="project_described_need">Project need</string>
 
     <!--login strings-->
     <string name="login_button">Login</string>

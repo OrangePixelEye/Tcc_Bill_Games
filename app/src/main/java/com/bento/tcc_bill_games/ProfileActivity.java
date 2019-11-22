@@ -13,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
-import com.xwray.groupie.ViewHolder;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -100,14 +100,14 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private class ProfileItem extends Item<ViewHolder>{
+    private class ProfileItem extends Item<GroupieViewHolder>{
         String name,line;
         public ProfileItem(String a,String b){
             this.name = a;
             this.line = b;
         }
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
             TextView txt_area = viewHolder.itemView.findViewById(R.id.txt_profile_area);
             TextView txt_line = viewHolder.itemView.findViewById(R.id.txt_profile_line);
             txt_area.setText(this.name);

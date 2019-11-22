@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,9 +20,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
-import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
 
@@ -60,12 +61,15 @@ public class ProjectActivity extends AppCompatActivity {
             public void onItemClick(@NonNull Item item, @NonNull View view) {
                 ProjectItem projItem = (ProjectItem) item;
 
-                Intent intent = new Intent(ProjectActivity.this, ProjectDescribedActivity.class);
 
-                intent.putExtra("projectSend", projItem.p);
-                intent.putExtra("logic",false);
 
-                startActivity(intent);
+                    Intent intent = new Intent(ProjectActivity.this, ProjectDescribedActivity.class);
+                    intent.putExtra("user", user);
+                    intent.putExtra("projectSend", projItem.p);
+                    intent.putExtra("logic", false);
+
+                    startActivity(intent);
+
             }
         });
 
@@ -98,6 +102,11 @@ public class ProjectActivity extends AppCompatActivity {
 
         if(extras!= null && extras.containsKey("user") ) {
             user = (User) extras.get("user");
+            if(user == null){
+                Toast.makeText(ProjectActivity.this, "Error:null object reference, please, just wait and try again", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ProjectActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
         }
     }
 
@@ -118,7 +127,7 @@ public class ProjectActivity extends AppCompatActivity {
 
     }
 
-    private class ProjectItem extends Item<ViewHolder>{
+    private class ProjectItem extends Item<GroupieViewHolder>{
         private Project p;
 
         public ProjectItem(Project p) {
@@ -126,7 +135,7 @@ public class ProjectActivity extends AppCompatActivity {
         }
 
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
             TextView txt_username = viewHolder.itemView.findViewById(R.id.txtItemProjectName);
             TextView txt_description = viewHolder.itemView.findViewById(R.id.txtItemProjectDescription);
             txt_username.setText(p.getName());

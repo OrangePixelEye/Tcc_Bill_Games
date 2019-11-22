@@ -24,8 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
-import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
 
@@ -81,14 +81,14 @@ public class ProjectDescribedActivity extends AppCompatActivity {
         configureScreen();
     }
 
-    private class NeedItem extends Item<ViewHolder> {
+    private class NeedItem extends Item<GroupieViewHolder> {
         String name,line;
         public NeedItem(String a,String b){
             this.name = a;
             this.line = b;
         }
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
             TextView txt_area = viewHolder.itemView.findViewById(R.id.txt_profile_area);
             TextView txt_line = viewHolder.itemView.findViewById(R.id.txt_profile_line);
             txt_area.setText(this.name);
@@ -107,44 +107,50 @@ public class ProjectDescribedActivity extends AppCompatActivity {
             project = (Project) extras.get("projectSend");
             logic = (Boolean) extras.get("logic");
             user = (User) extras.get("user");
-            if(project==null) {
+            if(user == null){
+                Toast.makeText(ProjectDescribedActivity.this, "Error:null user object reference, please, just wait and try again", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ProjectDescribedActivity.this, MainActivity.class);
                 startActivity(intent);
-            }else{
-                txtName.setText(project.getName());
-                txtCategory.setText(project.getGd());
-                txtDescription.setText(project.getDescription());
-                Picasso.get().load(project.getProject_url()).into(imgProj);
+            }else {
+                if (project == null) {
+                    Toast.makeText(ProjectDescribedActivity.this, "Error:null project object reference, please, just wait and try again", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ProjectDescribedActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    txtName.setText(project.getName());
+                    txtCategory.setText(project.getGd());
+                    txtDescription.setText(project.getDescription());
+                    Picasso.get().load(project.getProject_url()).into(imgProj);
 
-                final int size = project.getAreaN().size();
-                for (int i = 0; i < size; i++)
-                {
-                    String area = project.getAreaN().get(i);
-                    String line = project.getLineN().get(i);
-                    adapter.add(new NeedItem(area,line));
-                }
+                    final int size = project.getAreaN().size();
+                    for (int i = 0; i < size; i++) {
+                        String area = project.getAreaN().get(i);
+                        String line = project.getLineN().get(i);
+                        adapter.add(new NeedItem(area, line));
+                    }
 
-                if(project.getUuid().equals(user.getUuid())){
-                    p_button.setText(R.string.project_described_update);
-                    p_button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                    if (project.getUuid().equals(user.getUuid())) {
+                        p_button.setText(R.string.project_described_update);
+                        p_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                            Intent intent = new Intent(ProjectDescribedActivity.this, AddProjectActivity.class);
-                            intent.putExtra("projectSend", project);
-                            intent.putExtra("logic", true);
-                            startActivity(intent);
-                        }
-                    });
-                }else{
-                    p_button.setText(R.string.project_described_join);
-                    p_button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            sendRequest();
-                            p_button.setVisibility(View.GONE);
-                        }
-                    });
+                                Intent intent = new Intent(ProjectDescribedActivity.this, AddProjectActivity.class);
+                                intent.putExtra("projectSend", project);
+                                intent.putExtra("logic", true);
+                                startActivity(intent);
+                            }
+                        });
+                    } else {
+                        p_button.setText(R.string.project_described_join);
+                        p_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                sendRequest();
+                                p_button.setVisibility(View.GONE);
+                            }
+                        });
+                    }
                 }
             }
         }else{

@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
-import com.xwray.groupie.ViewHolder;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -18,10 +18,10 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         //configura normal
         //RecyclerView rv = findViewById()
-        GroupAdapter<ViewHolder> adapter = new GroupAdapter<>();
+        GroupAdapter<GroupieViewHolder> adapter = new GroupAdapter<>();
     }
 
-    private class MessageItem extends Item<ViewHolder>{
+    private class MessageItem extends Item<GroupieViewHolder>{
         private final boolean isLeft;
 
         private MessageItem(boolean isLeft) {
@@ -29,7 +29,7 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
 
         }
 

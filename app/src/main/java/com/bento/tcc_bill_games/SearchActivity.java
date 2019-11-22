@@ -1,6 +1,7 @@
 package com.bento.tcc_bill_games;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,23 +22,32 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.algolia.instantsearch.core.InstantSearch;
+import com.algolia.instantsearch.core.searcher.Searcher;
+import com.algolia.search.saas.AlgoliaException;
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.CompletionHandler;
+import com.algolia.search.saas.Index;
+import com.algolia.search.saas.Query;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
-import com.xwray.groupie.ViewHolder;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
-import javax.annotation.Nullable;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -53,11 +64,22 @@ public class SearchActivity extends AppCompatActivity {
     private GroupAdapter adapter;
     private EditText research_text;
     private RadioGroup rg;
+
+    private Client client;
+    private Index index;
+
+    private Searcher searcher;
+    private InstantSearch helper;
+
     User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         //UI
         proj = findViewById(R.id.txt_search_projects);
         txt_user = findViewById(R.id.txt_search_users);
@@ -67,6 +89,8 @@ public class SearchActivity extends AppCompatActivity {
         rg = findViewById(R.id.rg_search_user);
         Resources res = getResources();
         verify = res.getStringArray(R.array.games_array_areas);
+
+        client = new Client("W5VR2D9P1L", "ab5a352574967e49a2a49a91fa2696ca");
 
         rg.setVisibility(View.GONE);
 
@@ -133,29 +157,63 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void fetchUsers() {
-        FirebaseFirestore.getInstance().collection("users").whereEqualTo("name", s).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        index = client.getIndex("users");
+
+        try {
+            JSONObject settings = new JSONObject().put("searchableAttributes","name")
+                    .put("searchableAttributes","username")
+                    .put("searchableAttributes","email");
+            index.setSettingsAsync(settings,null);
+        }  catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Query query = new Query(s);
+        index.searchAsync(query, new CompletionHandler() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                for(DocumentSnapshot doc:docs){
-                    final User user = doc.toObject(User.class);
-                    adapter.setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(@NonNull Item item, @NonNull View view) {
-                            SearchActivity.ProjectItem projItem = (SearchActivity.ProjectItem) item;
-                            Intent intent = new Intent(SearchActivity.this, ProjectDescribedActivity.class);
-                            intent.putExtra("projectSend", projItem.p);
-                            intent.putExtra("logic",false);
-                            startActivity(intent);
-                        }
-                    });
-                    adapter.add(new SearchActivity.UserItem(user));
+            public void requestCompleted(@Nullable JSONObject jsonObject, @Nullable AlgoliaException e) {
+                try {
+                    assert jsonObject != null;
+                    JSONArray array = jsonObject.getJSONArray("hits");
+                    for(int i = 0 ; i < array.length(); i++){
+                        JSONObject jo = array.getJSONObject(i);
+
+                        String mJsonString = jo.toString();
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson =  parser.parse(mJsonString);
+                        Gson gson = new Gson();
+                        User object = gson.fromJson(mJson, User.class);
+                        FirebaseFirestore.getInstance().collection("users").whereEqualTo("name", object.getName()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                                for(DocumentSnapshot doc:docs){
+                                    final User user = doc.toObject(User.class);
+                                    /*
+                                    adapter.setOnItemClickListener(new OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(@NonNull Item item, @NonNull View view) {
+                                            SearchActivity.ProjectItem projItem = (SearchActivity.ProjectItem) item;
+                                            Intent intent = new Intent(SearchActivity.this, ProjectDescribedActivity.class);
+                                            intent.putExtra("projectSend", projItem.p);
+                                            intent.putExtra("logic",false);
+                                            startActivity(intent);
+                                        }
+                                    });*/
+                                    adapter.add(new SearchActivity.UserItem(user));
+                                }
+                            }
+                        });
+                    }
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
                 }
             }
         });
+
     }
 
     private void fetchUsersByCategory() {
+
         FirebaseFirestore.getInstance().collection("users").whereEqualTo("line", s).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -209,20 +267,49 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void fetchProjects() {
-
-        FirebaseFirestore.getInstance().collection("projects").whereEqualTo("name", s).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        index = client.getIndex("projects");
+        try {
+            JSONObject settings = new JSONObject().put("searchableAttributes","name");
+            index.setSettingsAsync(settings,null);
+        }  catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Query query = new Query(s);
+        index.searchAsync(query, new CompletionHandler() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                for(DocumentSnapshot doc:docs){
-                    final Project project = doc.toObject(Project.class);
-                    adapter.add(new SearchActivity.ProjectItem(project));
+            public void requestCompleted(@Nullable JSONObject jsonObject, @Nullable AlgoliaException e) {
+                try {
+                    assert jsonObject != null;
+                    JSONArray array = jsonObject.getJSONArray("hits");
+                    for(int i = 0 ; i < array.length(); i++){
+                        JSONObject jo = array.getJSONObject(i);
+
+                        String mJsonString = jo.toString();
+                        JsonParser parser = new JsonParser();
+                        JsonElement mJson =  parser.parse(mJsonString);
+                        Gson gson = new Gson();
+                        Project object = gson.fromJson(mJson, Project.class);
+                        FirebaseFirestore.getInstance().collection("projects").whereEqualTo("name", object.getName()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                                for(DocumentSnapshot doc:docs){
+                                    final Project project = doc.toObject(Project.class);
+                                    adapter.add(new SearchActivity.ProjectItem(project));
+                                }
+                            }
+                        });
+                    }
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
                 }
             }
         });
+
+
     }
 
-    private class ProjectItem extends Item<ViewHolder> {
+    private class ProjectItem extends Item<GroupieViewHolder> {
         private Project p;
 
         public ProjectItem(Project p) {
@@ -230,7 +317,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
             TextView txt_username = viewHolder.itemView.findViewById(R.id.txtItemProjectName);
             TextView txt_description = viewHolder.itemView.findViewById(R.id.txtItemProjectDescription);
             txt_username.setText(p.getName());
@@ -244,7 +331,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
     }
-    private class UserItem extends Item<ViewHolder> {
+    private class UserItem extends Item<GroupieViewHolder> {
         private User user;
 
         public UserItem(User user) {
@@ -252,7 +339,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
             TextView txt_username = viewHolder.itemView.findViewById(R.id.textView);
             ImageView imgPhoto = viewHolder.itemView.findViewById(R.id.imageView);
             txt_username.setText(user.getName());

@@ -28,6 +28,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.Index;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,12 +43,17 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
-import com.xwray.groupie.ViewHolder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,11 +75,19 @@ public class RegisterActivity extends AppCompatActivity {
     private RecyclerView rv;
     private GroupAdapter groupAdapter;
 
+    //Some variables that i will use
     private List<String> areaM,lineM;
     private Boolean is_ok;
     private Boolean is_updating;
     private Boolean is_selected = false;
+    private Boolean is_new_photo = false;
+
+    //Classes
     User user;
+
+    //Algolia variables
+    private Client client;
+    private Index index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +108,13 @@ public class RegisterActivity extends AppCompatActivity {
         sp_line = findViewById(R.id.sp_register_line);
         add = findViewById(R.id.btn_register_add_new);
         rv = findViewById(R.id.rv_register);
+        PhoneNumber.addTextChangedListener(MaskEditUtil.mask(PhoneNumber, MaskEditUtil.FORMAT_FONE));
 
+        //Algolia configuration
+        client = new Client("W5VR2D9P1L", "ab5a352574967e49a2a49a91fa2696ca");
+        index = client.getIndex("users");
+
+        //Recycler view adapter's configuration
         groupAdapter = new GroupAdapter();
         rv.setAdapter(groupAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -101,6 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
         add.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
 
+        //On.click events
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,23 +131,10 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        btn_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            final String Vemail = Email.getText().toString();
-            final String Vpassword = Password.getText().toString();
-            final String Vname = Name.getText().toString();
-            final String Vusername = Username.getText().toString();
-            //user's data verification
-            is_ok = !Vusername.isEmpty() && !Vname.isEmpty() && !Vemail.isEmpty() && !Vpassword.isEmpty();
-            if(is_ok){
-                CreateUser();
-                btn_register.setVisibility(View.GONE);
-            }
-            }
-        });
+        //Auxiliary methods
         VerifyUpdate();
         ArrayConfig();
+
         //event for photo selection
         selected_photo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +170,22 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, "Usuario deletado", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+
+                            List<JSONObject> array = new ArrayList<JSONObject>();
+
+                            try {
+                                array.add(
+                                        new JSONObject().put("objectID", user.getUuid())
+                                );
+
+
+                                index.deleteObjectsAsync(Arrays.asList(user.getUuid()), null);
+                                startActivity(intent);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                startActivity(intent);
+                            }
                         }
                     });
                 }
@@ -180,9 +204,40 @@ public class RegisterActivity extends AppCompatActivity {
                     delete_account.show();
                 }
             });
+            btn_register.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String Vemail = Email.getText().toString();
+                    final String Vpassword = Password.getText().toString();
+                    final String Vname = Name.getText().toString();
+                    final String Vusername = Username.getText().toString();
+                    //user's data verification
+                    is_ok = !Vusername.isEmpty() && !Vname.isEmpty() && !Vemail.isEmpty() && !Vpassword.isEmpty();
+                    if(is_ok){
+                        UpdateUser();
+                        btn_register.setVisibility(View.GONE);
+                    }
+                }
+            });
            String area = user.getAreaM().get(0);
            String generalArea ="games_array_"+ area;
 
+        }else{
+            btn_register.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String Vemail = Email.getText().toString();
+                    final String Vpassword = Password.getText().toString();
+                    final String Vname = Name.getText().toString();
+                    final String Vusername = Username.getText().toString();
+                    //user's data verification
+                    is_ok = !Vusername.isEmpty() && !Vname.isEmpty() && !Vemail.isEmpty() && !Vpassword.isEmpty();
+                    if(is_ok){
+                        CreateUser();
+                        btn_register.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
     }
 
@@ -270,6 +325,10 @@ public class RegisterActivity extends AppCompatActivity {
                 mSelectedUri = data.getData();
                 Bitmap bitmap = null;
                 try {
+                    //if user is updating the profile the new photo is activated in UpdateUser()
+                    if(is_updating){
+                        is_new_photo = true;
+                    }
                     //reference to the user's image in a bitmap
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
                     //load the selected user's picture and put it in a image view
@@ -328,14 +387,44 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
-    private void SaveUserInDatabase(User user){
+    private void SaveUserInDatabase(final User user){
         //create a doc reference with the firebaseAuth's id
         FirebaseFirestore.getInstance().collection("users").document(user.getUuid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+
+                JSONObject object = null;
+                try {
+                    //An amazing thing is happening
+                    //but idk what is
+
+                    //just kidding
+                    //this is a verification for algolia
+                    if(is_updating){
+                        List<JSONObject> array = new ArrayList<JSONObject>();
+
+                        try {
+                            array.add(
+                                    new JSONObject().put("name", user.getName()).put("username",user.getUsername()).put("email",user.getEmail()).put("objectID", user.getUuid())
+                            );
+                            index.partialUpdateObjectsAsync(new JSONArray(array), null);
+                            startActivity(intent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.i("teste","Errou");
+                            startActivity(intent);
+                        }
+                    }else {
+                        object = new JSONObject()
+                                .put("name", user.getName()).put("username", user.getUsername()).put("email", user.getEmail()).put("objectId", user.getUuid());
+                        index.addObjectAsync(object, user.getUuid(), null);
+                        startActivity(intent);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -383,6 +472,35 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    private void UpdateUser(){
+        if(is_new_photo){
+            FirebaseFirestore.getInstance().collection("users").document(user.getUuid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    SaveUserInFirebase();
+                }
+            });
+        }else{
+            FirebaseFirestore.getInstance().collection("users").document(user.getUuid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    String uid = FirebaseAuth.getInstance().getUid();
+                    String username = Username.getText().toString();
+                    String profile_url = user.getProfile_url();
+                    String name = Name.getText().toString();
+
+                    String phone = PhoneNumber.getText().toString();
+                    String email = Email.getText().toString();
+
+                    configureArrayForSave();
+                    User user = new User(uid, username, profile_url, name, phone,email,areaM, lineM);
+
+                    SaveUserInDatabase(user);
+                }
+            });
+        }
+    }
+
     private void configureArrayForSave() {
         areaM = new ArrayList<String>();
         lineM = new ArrayList<String>();
@@ -409,14 +527,14 @@ public class RegisterActivity extends AppCompatActivity {
             }
     }
 
-    private class MultipleItem extends Item<ViewHolder> {
+    private class MultipleItem extends Item<GroupieViewHolder> {
         private Spinner sp_area_new;
         private Spinner sp_line_new;
 
         public MultipleItem() {}
 
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
             sp_area_new = viewHolder.itemView.findViewById(R.id.sp_item_register_area);
             sp_line_new = viewHolder.itemView.findViewById(R.id.sp_item_register_line);
 

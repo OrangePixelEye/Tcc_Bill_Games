@@ -8,11 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
-import com.xwray.groupie.ViewHolder;
 
 public class RegisterActivityMultiple extends AppCompatActivity {
     private Button confirm;
@@ -68,7 +67,7 @@ public class RegisterActivityMultiple extends AppCompatActivity {
             areaM = (String[]) extras.get("MultipleArea");
         }
     }
-    private class ProjectItem extends Item<ViewHolder> {
+    private class ProjectItem extends Item<GroupieViewHolder> {
         private Project p;
 
         public ProjectItem() {
@@ -76,7 +75,7 @@ public class RegisterActivityMultiple extends AppCompatActivity {
         }
 
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
 
         }
 

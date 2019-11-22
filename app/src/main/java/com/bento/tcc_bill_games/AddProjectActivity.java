@@ -24,9 +24,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.algolia.search.saas.Client;
+import com.algolia.search.saas.Index;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,19 +38,26 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
-import com.xwray.groupie.ViewHolder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+
 public class AddProjectActivity extends AppCompatActivity {
 
+    //UI variables
     private Button addImage;
     private ImageView projImage;
     private Button createProj;
@@ -61,13 +71,33 @@ public class AddProjectActivity extends AppCompatActivity {
     private GroupAdapter groupAdapter;
     private Button add_need;
 
+    //some variables that i will use
     boolean is_new_photo = false;
     boolean is_updating = false;
     boolean logic = false;
     private List<String> areaM,lineM;
+
+    //classes
     User user;
     Project project;
 
+    //algolia references
+    private Client client;
+    private Index index;
+
+    //method organization
+        //on Create
+        //login
+        //verify update
+        //configure Array
+        //configure array for save
+        //select photo
+        //activity result
+        //update
+        //create
+        //multiple Item class
+
+    //create the activity and bring the user who is updating the option to delete
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +126,9 @@ public class AddProjectActivity extends AppCompatActivity {
         rv.setAdapter(groupAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
         add_need = findViewById(R.id.btn_add_project_need);
+
+        client = new Client("W5VR2D9P1L", "ab5a352574967e49a2a49a91fa2696ca");
+        index = client.getIndex("projects");
 
         add_need.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,29 +173,26 @@ public class AddProjectActivity extends AppCompatActivity {
         });
 
 
-
     }
-
-    private void configureArrayForSave() {
-        areaM = new ArrayList<String>();
-        lineM = new ArrayList<String>();
-
-        for (int i = 0; i < rv.getChildCount(); i++) {
-            View view2 = rv.getLayoutManager().findViewByPosition(i);
-            Spinner SpinnerArea = view2.findViewById(R.id.sp_item_register_area);
-            Spinner SpinnerLine = view2.findViewById(R.id.sp_item_register_line);
-            TextView AreaSpinner = (TextView)SpinnerArea.getSelectedView();
-            String StringAreaSpinner = AreaSpinner.getText().toString();
-
-            TextView LineSpinner = (TextView)SpinnerLine.getSelectedView();
-            String StringLineSpinner = LineSpinner.getText().toString();
-            if(!(areaM.contains(StringAreaSpinner) && lineM.contains(StringLineSpinner))){
-                areaM.add(StringAreaSpinner);
-                lineM.add(StringLineSpinner);
-            }
+    //Login
+    private void LoginUser() {
+        String doc = FirebaseAuth.getInstance().getUid();
+        if (doc != null) {
+            FirebaseFirestore.getInstance().collection("users").document(doc).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot != null) {
+                        user = documentSnapshot.toObject(User.class);
+                    } else {
+                        Intent intent = new Intent(AddProjectActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                }
+            });
         }
     }
-
+    //verify if the user is updating the project
     private void verifyUpdate() {
         Bundle extras = getIntent().getExtras();
         if(extras!= null && extras.containsKey("logic")) {
@@ -187,7 +217,23 @@ public class AddProjectActivity extends AppCompatActivity {
                                 public void onSuccess(Void aVoid) {
                                     Intent intent = new Intent(AddProjectActivity.this,MainActivity.class);
                                     intent.putExtra("logic",logic);
-                                    startActivity(intent);
+
+                                    List<JSONObject> array = new ArrayList<JSONObject>();
+
+                                    try {
+                                        array.add(
+                                                new JSONObject().put("objectID", project.getProject_id())
+                                        );
+
+
+                                        index.deleteObjectsAsync(Arrays.asList(project.getProject_id()), null);
+                                        startActivity(intent);
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        startActivity(intent);
+                                    }
+
                                 }
                             });
                         }
@@ -224,7 +270,130 @@ public class AddProjectActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+    //configure array to put it in firebase
+    private void configureArrayForSave() {
+        areaM = new ArrayList<String>();
+        lineM = new ArrayList<String>();
 
+        for (int i = 0; i < rv.getChildCount(); i++) {
+            View view2 = rv.getLayoutManager().findViewByPosition(i);
+            Spinner SpinnerArea = view2.findViewById(R.id.sp_item_register_area);
+            Spinner SpinnerLine = view2.findViewById(R.id.sp_item_register_line);
+            TextView AreaSpinner = (TextView)SpinnerArea.getSelectedView();
+            String StringAreaSpinner = AreaSpinner.getText().toString();
+
+            TextView LineSpinner = (TextView)SpinnerLine.getSelectedView();
+            String StringLineSpinner = LineSpinner.getText().toString();
+            if(!(areaM.contains(StringAreaSpinner) && lineM.contains(StringLineSpinner))){
+                areaM.add(StringAreaSpinner);
+                lineM.add(StringLineSpinner);
+            }
+        }
+    }
+    //configure array in UI
+    private void ConfigureArray(Spinner sp_area_new, Spinner sp_line_new) {
+        Spinner area = sp_area_new;
+        final Spinner line = sp_line_new;
+        //Arrays adapters
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.games_array_areas, android.R.layout.simple_spinner_dropdown_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterP = ArrayAdapter.createFromResource(this,
+                R.array.games_array_programmer, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterD = ArrayAdapter.createFromResource(this,
+                R.array.games_array_designer, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterA = ArrayAdapter.createFromResource(this,
+                R.array.games_array_artist, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<CharSequence> adapterSA = ArrayAdapter.createFromResource(this,
+                R.array.games_array_sound_master, android.R.layout.simple_spinner_item);
+        adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //arrays for area selection
+        area.setAdapter(adapter);
+        //spinner for each area
+        area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        line.setVisibility(View.INVISIBLE);
+                        break;
+                    case 1:
+                        line.setAdapter(adapterP);
+                        line.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        line.setAdapter(adapterD);
+                        line.setVisibility(View.VISIBLE);
+                        break;
+                    case 3:
+                        line.setAdapter(adapterA);
+                        line.setVisibility(View.VISIBLE);
+                        break;
+                    case 4:
+                        line.setAdapter(adapterSA);
+                        line.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        //spinner for each line of each area
+        line.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+    //Select project's photo
+    private void selectPhoto() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/");
+        startActivityForResult(intent,0);
+    }
+    //receive project's photo
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 0){
+            if (resultCode == RESULT_OK) {
+                mSelectedUri = data.getData();
+                Bitmap bitmap = null;
+                try {
+                    if(is_updating){
+                        is_new_photo = true;
+                    }
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
+                    Picasso.get().load(mSelectedUri).into(projImage);
+                    projImage.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
+                    addImage.getBackground().setAlpha(0);
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(AddProjectActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    Toast.makeText(AddProjectActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        if(resultCode == RESULT_CANCELED){
+            recreate();
+        }
+    }
+    //update project in firebase and in algolia
     private void UpdateProject(){
         final String date = project.getDate_added();
         if(is_new_photo){
@@ -255,7 +424,20 @@ public class AddProjectActivity extends AppCompatActivity {
                                     Intent intent  = new Intent(AddProjectActivity.this,ProjectDescribedActivity.class);
                                     intent.putExtra("projectSend",proj);
                                     intent.putExtra("logic",logic);
-                                    startActivity(intent);
+
+                                    List<JSONObject> array = new ArrayList<JSONObject>();
+
+                                    try {
+                                        array.add(
+                                                new JSONObject().put("name", proj.getName()).put("objectID", proj.getProject_id())
+                                        );
+                                        index.partialUpdateObjectsAsync(new JSONArray(array), null);
+                                        startActivity(intent);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Log.i("teste","Errou");
+                                        startActivity(intent);
+                                    }
                                 }
                             });
                         }
@@ -289,7 +471,20 @@ public class AddProjectActivity extends AppCompatActivity {
                             Intent intent  = new Intent(AddProjectActivity.this,ProjectDescribedActivity.class);
                             intent.putExtra("projectSend",proj);
                             intent.putExtra("logic",logic);
-                            startActivity(intent);
+
+                            List<JSONObject> array = new ArrayList<JSONObject>();
+
+                            try {
+                                array.add(
+                                        new JSONObject().put("name", proj.getName()).put("objectID", proj.getProject_id())
+                                );
+                                index.partialUpdateObjectsAsync(new JSONArray(array), null);
+                                startActivity(intent);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.i("teste","Errou");
+                                startActivity(intent);
+                            }
                         }
                     });
                 }
@@ -297,7 +492,7 @@ public class AddProjectActivity extends AppCompatActivity {
 
         }
     }
-
+    //method for create project and put it in algolia
     private void createProject() {
         String filename = UUID.randomUUID().toString();
         final StorageReference ref = FirebaseStorage.getInstance().getReference("/images/" + filename);
@@ -318,15 +513,29 @@ public class AddProjectActivity extends AppCompatActivity {
                         String profile_url = uri.toString();
 
                         Date currentTime = Calendar.getInstance().getTime();
-                        String cDate = "-" + currentTime.toString();
+                        String cDate = currentTime.toString();
                         configureArrayForSave();
-                        Project proj = new Project(gd, project_id, uuid, name, description, profile_url,cDate,areaM,lineM);
+                        final Project proj = new Project(gd, project_id, uuid, name, description, profile_url,cDate,areaM,lineM);
 
                         FirebaseFirestore.getInstance().collection("projects").document(proj.getProject_id()).set(proj).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Intent intent = new Intent(AddProjectActivity.this, ProjectActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                JSONObject object = null;
+                                try {
+                                    object = new JSONObject()
+                                            .put("name", proj.getName());
+                                    Log.i("teste","Gerou objeto");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Log.i("teste","Errou");
+                                }
+
+                                index.addObjectAsync(object, proj.getProject_id(), null);
+
+
                                 startActivity(intent);
                             }
                         });
@@ -340,59 +549,8 @@ public class AddProjectActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void selectPhoto() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/");
-        startActivityForResult(intent,0);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 0){
-            if (resultCode == RESULT_OK) {
-                mSelectedUri = data.getData();
-                Bitmap bitmap = null;
-                try {
-                    if(is_updating){
-                        is_new_photo = true;
-                    }
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectedUri);
-                    Picasso.get().load(mSelectedUri).into(projImage);
-                    projImage.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
-                    addImage.getBackground().setAlpha(0);
-                } catch (FileNotFoundException e) {
-                    Toast.makeText(AddProjectActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    Toast.makeText(AddProjectActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-        if(resultCode == RESULT_CANCELED){
-            recreate();
-        }
-    }
-
-    private void LoginUser() {
-        String doc = FirebaseAuth.getInstance().getUid();
-        if (doc != null) {
-            FirebaseFirestore.getInstance().collection("users").document(doc).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (documentSnapshot != null) {
-                        user = documentSnapshot.toObject(User.class);
-                    } else {
-                        Intent intent = new Intent(AddProjectActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
-                }
-            });
-        }
-    }
-
-    private class MultipleItem extends Item<ViewHolder> {
+    //Items to select area
+    private class MultipleItem extends Item<GroupieViewHolder> {
         private Spinner sp_area_new;
         private Spinner sp_line_new;
 
@@ -400,7 +558,7 @@ public class AddProjectActivity extends AppCompatActivity {
         }
 
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
             sp_area_new = viewHolder.itemView.findViewById(R.id.sp_item_register_area);
             sp_line_new = viewHolder.itemView.findViewById(R.id.sp_item_register_line);
 
@@ -411,75 +569,5 @@ public class AddProjectActivity extends AppCompatActivity {
         public int getLayout() {
             return R.layout.item_register_multiple;
         }
-    }
-
-        private void ConfigureArray(Spinner sp_area_new, Spinner sp_line_new) {
-            Spinner area = sp_area_new;
-            final Spinner line = sp_line_new;
-            //Arrays adapters
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.games_array_areas, android.R.layout.simple_spinner_dropdown_item);
-
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            final ArrayAdapter<CharSequence> adapterP = ArrayAdapter.createFromResource(this,
-                    R.array.games_array_programmer, android.R.layout.simple_spinner_item);
-            adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            final ArrayAdapter<CharSequence> adapterD = ArrayAdapter.createFromResource(this,
-                    R.array.games_array_designer, android.R.layout.simple_spinner_item);
-            adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            final ArrayAdapter<CharSequence> adapterA = ArrayAdapter.createFromResource(this,
-                    R.array.games_array_artist, android.R.layout.simple_spinner_item);
-            adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            final ArrayAdapter<CharSequence> adapterSA = ArrayAdapter.createFromResource(this,
-                    R.array.games_array_sound_master, android.R.layout.simple_spinner_item);
-            adapterP.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-            //arrays for area selection
-            area.setAdapter(adapter);
-            //spinner for each area
-            area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    switch (position){
-                        case 0:
-                            line.setVisibility(View.INVISIBLE);
-                            break;
-                        case 1:
-                            line.setAdapter(adapterP);
-                            line.setVisibility(View.VISIBLE);
-                            break;
-                        case 2:
-                            line.setAdapter(adapterD);
-                            line.setVisibility(View.VISIBLE);
-                            break;
-                        case 3:
-                            line.setAdapter(adapterA);
-                            line.setVisibility(View.VISIBLE);
-                            break;
-                        case 4:
-                            line.setAdapter(adapterSA);
-                            line.setVisibility(View.VISIBLE);
-                            break;
-                    }
-                }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-            //spinner for each line of each area
-            line.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
     }
 }

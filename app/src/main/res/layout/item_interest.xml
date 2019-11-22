@@ -27,7 +27,6 @@
         android:id="@+id/txt_item_interest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/txt_item_interest_project"
         app:layout_constraintEnd_toStartOf="@+id/btn_item_interest_acccept"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +36,6 @@
         android:id="@+id/txt_item_interest_project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/view7"
         app:layout_constraintEnd_toEndOf="@+id/txt_item_interest"
         app:layout_constraintStart_toStartOf="@+id/txt_item_interest" />

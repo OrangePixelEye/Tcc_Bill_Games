@@ -26,8 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
-import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
 
@@ -99,14 +99,14 @@ public class InterestActivity extends AppCompatActivity {
 
     }
 
-    private class InterestItem extends Item<ViewHolder> {
+    private class InterestItem extends Item<GroupieViewHolder> {
         private Interest interest;
         public InterestItem(Interest interest) {
             this.interest = interest;
         }
 
         @Override
-        public void bind(@NonNull final ViewHolder viewHolder, int position) {
+        public void bind(@NonNull final GroupieViewHolder viewHolder, int position) {
             TextView txt_username = viewHolder.itemView.findViewById(R.id.txt_item_interest);
             TextView txt_project = viewHolder.itemView.findViewById(R.id.txt_item_interest_project);
 

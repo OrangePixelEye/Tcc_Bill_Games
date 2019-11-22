@@ -26,9 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.OnItemClickListener;
-import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
 
@@ -84,15 +84,17 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull Item item, @NonNull View view) {
+
                 MainActivity.ProjectItem projItem = (MainActivity.ProjectItem) item;
 
-                Intent intent = new Intent(MainActivity.this, ProjectDescribedActivity.class);
+                    Intent intent = new Intent(MainActivity.this, ProjectDescribedActivity.class);
 
-                intent.putExtra("projectSend", projItem.p);
-                intent.putExtra("logic",true);
-                intent.putExtra("user",user);
+                    intent.putExtra("projectSend", projItem.p);
+                    intent.putExtra("logic", true);
+                    intent.putExtra("user", user);
 
-                startActivity(intent);
+                    startActivity(intent);
+
             }
         });
 
@@ -206,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private class ProjectItem extends Item<ViewHolder>{
+    private class ProjectItem extends Item<GroupieViewHolder>{
         private Project p;
 
         public ProjectItem(Project p) {
@@ -214,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void bind(@NonNull ViewHolder viewHolder, int position) {
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
             TextView txt_username = viewHolder.itemView.findViewById(R.id.textView2);
             ImageView img = viewHolder.itemView.findViewById(R.id.imageView3);
             txt_username.setText(p.getName());

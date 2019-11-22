@@ -8,8 +8,8 @@
 
     <Button
         android:id="@+id/btn_search"
-        android:layout_width="34dp"
-        android:layout_height="41dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/SearchBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -50,17 +50,21 @@
 
     <EditText
         android:id="@+id/SearchBar"
-        android:layout_width="263dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/search_main"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
+        android:background="@drawable/bg_edittext_rounded"
         android:ems="10"
+        android:hint="@string/search_main"
         android:inputType="textPersonName"
+        android:paddingLeft="8dp"
+        android:paddingBottom="2dp"
+        android:paddingRight="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view8"
         app:layout_constraintEnd_toStartOf="@+id/btn_search"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/view8" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_main_activity"
@@ -69,7 +73,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SearchBar" />
+        app:layout_constraintTop_toBottomOf="@+id/view8" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_user_profile"
@@ -107,6 +111,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view8"
+        android:layout_width="411dp"
+        android:layout_height="58dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
