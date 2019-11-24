@@ -136,6 +136,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn_notifications.getBackground().setAlpha(0);
+        btn_logout.getBackground().setAlpha(0);
+        btn_search.getBackground().setAlpha(0);
         fetchProjects();
 
     }

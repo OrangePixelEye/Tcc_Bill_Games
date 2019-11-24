@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/btn_search"
-        android:layout_width="wrap_content"
+        android:layout_width="45dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/SearchBar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,6 +89,7 @@
         android:id="@+id/img_project"
         android:layout_width="45dp"
         android:layout_height="45dp"
+
         app:layout_constraintBottom_toBottomOf="@+id/btn_projects"
         app:layout_constraintEnd_toEndOf="@+id/btn_projects"
         app:layout_constraintStart_toStartOf="@+id/btn_projects"
@@ -122,5 +123,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_notification"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_main_notification"
+        app:layout_constraintEnd_toEndOf="@+id/btn_main_notification"
+        app:layout_constraintStart_toStartOf="@+id/btn_main_notification"
+        app:layout_constraintTop_toTopOf="@+id/btn_main_notification"
+        android:background="@mipmap/temp_notification_icon" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_quit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/temp_quit_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_logout"
+        app:layout_constraintEnd_toEndOf="@+id/btn_logout"
+        app:layout_constraintStart_toStartOf="@+id/btn_logout"
+        app:layout_constraintTop_toTopOf="@+id/btn_logout" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/temp_search_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/btn_search"
+        app:layout_constraintTop_toTopOf="@+id/btn_search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
