@@ -23,7 +23,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.core.OrderBy;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.GroupieViewHolder;
@@ -63,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
         btn_logout = findViewById(R.id.btn_logout);
         search_bar = findViewById(R.id.SearchBar);
         rv = findViewById(R.id.rv_main_activity);
+
+        search_bar.setFocusableInTouchMode(true);
+        search_bar.requestFocus();
 
         hideEverything();
 
@@ -193,11 +198,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchProjects() {
-        FirebaseFirestore.getInstance().collection("projects").orderBy("date_added").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("projects").orderBy("date_added", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if(e != null){
-                    Log.e("Teste", e.getMessage());
+
                     return;
                 }
                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();

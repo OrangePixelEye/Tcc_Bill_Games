@@ -6,7 +6,7 @@
     <application
         android:allowBackup="true"
         android:appComponentFactory="@string/app_name"
-        android:icon="@mipmap/user_icon"
+        android:icon="@mipmap/temp_logo_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"

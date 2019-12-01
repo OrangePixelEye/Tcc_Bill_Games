@@ -7,4 +7,5 @@
 
     <color name="bg_color">#d9d9d9</color>
     <color name="bg_profile_image">#E4E4E4</color>
+    <color name="darker_white">#026DCA</color>
 </resources>

@@ -188,17 +188,17 @@ public class SearchActivity extends AppCompatActivity {
                                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                                 for(DocumentSnapshot doc:docs){
                                     final User user = doc.toObject(User.class);
-                                    /*
+
                                     adapter.setOnItemClickListener(new OnItemClickListener() {
                                         @Override
                                         public void onItemClick(@NonNull Item item, @NonNull View view) {
-                                            SearchActivity.ProjectItem projItem = (SearchActivity.ProjectItem) item;
+                                            SearchActivity.UserItem userItem = (SearchActivity.UserItem) item;
                                             Intent intent = new Intent(SearchActivity.this, ProjectDescribedActivity.class);
-                                            intent.putExtra("projectSend", projItem.p);
+                                            intent.putExtra("user", userItem.user);
                                             intent.putExtra("logic",false);
                                             startActivity(intent);
                                         }
-                                    });*/
+                                    });
                                     adapter.add(new SearchActivity.UserItem(user));
                                 }
                             }
@@ -223,12 +223,10 @@ public class SearchActivity extends AppCompatActivity {
                     adapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(@NonNull Item item, @NonNull View view) {
-                            SearchActivity.ProjectItem projItem = (SearchActivity.ProjectItem) item;
+                            SearchActivity.UserItem userItem = (SearchActivity.UserItem) item;
 
                             Intent intent = new Intent(SearchActivity.this, ProjectDescribedActivity.class);
-
-                            intent.putExtra("projectSend", projItem.p);
-                            intent.putExtra("logic",false);
+                            intent.putExtra("user", userItem.user);
 
                             startActivity(intent);
                         }
@@ -295,6 +293,20 @@ public class SearchActivity extends AppCompatActivity {
                                 List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                                 for(DocumentSnapshot doc:docs){
                                     final Project project = doc.toObject(Project.class);
+
+                                    adapter.setOnItemClickListener(new OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(@NonNull Item item, @NonNull View view) {
+                                            SearchActivity.ProjectItem projItem = (SearchActivity.ProjectItem) item;
+
+                                            Intent intent = new Intent(SearchActivity.this, ProjectDescribedActivity.class);
+                                            intent.putExtra("user",user);
+                                            intent.putExtra("projectSend", projItem.p);
+                                            intent.putExtra("logic",true);
+
+                                            startActivity(intent);
+                                        }
+                                    });
                                     adapter.add(new SearchActivity.ProjectItem(project));
                                 }
                             }
@@ -305,8 +317,6 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     private class ProjectItem extends Item<GroupieViewHolder> {
@@ -331,6 +341,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
     }
+
     private class UserItem extends Item<GroupieViewHolder> {
         private User user;
 

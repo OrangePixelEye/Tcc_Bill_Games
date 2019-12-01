@@ -8,8 +8,11 @@
 
     <Button
         android:id="@+id/btn_project_described_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@mipmap/temp_back_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -17,45 +20,43 @@
         android:id="@+id/imgProjectDescribed"
         android:layout_width="293dp"
         android:layout_height="292dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_project_described_back"
+        app:layout_constraintTop_toBottomOf="@+id/view_p_d_a"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/txtProjectDescribedName"
-        android:layout_width="wrap_content"
-        android:layout_height="23dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/txtProjectDescribedCategory"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgProjectDescribed" />
+
 
     <TextView
         android:id="@+id/txtProjectDescribedCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtProjectDescribedName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txtProjectDescribedName"
-        app:layout_constraintTop_toTopOf="@+id/txtProjectDescribedName" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/imgProjectDescribed"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/imgProjectDescribed"
+        app:layout_constraintTop_toBottomOf="@+id/imgProjectDescribed" />
 
     <TextView
         android:id="@+id/txtProjectDescribedDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_edittext_rounded"
+        android:paddingLeft="8dp"
+        android:paddingEnd="2dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="2dp"
+       android:gravity="center"
         app:autoSizeTextType="uniform"
-        app:layout_constraintEnd_toEndOf="@+id/txtProjectDescribedCategory"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="@+id/txtProjectDescribedName"
-        app:layout_constraintTop_toBottomOf="@+id/txtProjectDescribedName" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtProjectDescribedCategory" />
 
     <Button
         android:id="@+id/btn_project_described_p"
+        android:background="@drawable/bg_button_rounded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
@@ -65,11 +66,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/txt_project_described_need"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/project_described_need"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtProjectDescribedDescription" />
 
@@ -81,5 +84,24 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_project_described_p"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_project_described_need" />
+
+    <View
+        android:id="@+id/view_p_d_a"
+        android:layout_width="0dp"
+        android:layout_height="82dp"
+        android:background="@color/bg_profile_image"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_project_described_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtProjectDescribedName"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_p_d_a"
+        app:layout_constraintEnd_toEndOf="@+id/view_p_d_a"
+        app:layout_constraintStart_toStartOf="@+id/view_p_d_a"
+        app:layout_constraintTop_toTopOf="@+id/view_p_d_a" />
 </androidx.constraintlayout.widget.ConstraintLayout>

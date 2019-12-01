@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.GroupieViewHolder;
@@ -91,6 +93,9 @@ public class ProfileActivity extends AppCompatActivity {
                     adapter.add(new ProfileItem(area,line));
                 }
                 Picasso.get().load(user.getProfile_url()).into(imgUser);
+                if(!user.getUuid().equals( FirebaseAuth.getInstance().getUid() )){
+                    update.setVisibility(View.GONE);
+                }
 
 
             }

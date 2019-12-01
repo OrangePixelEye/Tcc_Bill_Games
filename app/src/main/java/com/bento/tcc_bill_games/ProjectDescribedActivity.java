@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +40,7 @@ public class ProjectDescribedActivity extends AppCompatActivity {
     private TextView txtCategory;
     private RecyclerView rv;
     private GroupAdapter adapter;
+    private TextView txtNeed;
     Boolean logic;//true in the main's case and false in the projectActivity's case
     User user;
     Project project;
@@ -57,6 +59,8 @@ public class ProjectDescribedActivity extends AppCompatActivity {
         txtCategory = findViewById(R.id.txtProjectDescribedCategory);
         back = findViewById(R.id.btn_project_described_back);
         p_button = findViewById(R.id.btn_project_described_p);
+        txtNeed = findViewById(R.id.txt_project_described_need);
+        txtName.setTypeface(null, Typeface.BOLD);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +131,10 @@ public class ProjectDescribedActivity extends AppCompatActivity {
                         String area = project.getAreaN().get(i);
                         String line = project.getLineN().get(i);
                         adapter.add(new NeedItem(area, line));
+                    }
+                    if (size ==0){
+                        txtNeed.setVisibility(View.GONE);
+                        rv.setVisibility(View.GONE);
                     }
 
                     if (project.getUuid().equals(user.getUuid())) {

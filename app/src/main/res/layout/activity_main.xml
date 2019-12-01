@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/btn_search"
-        android:layout_width="45dp"
+        android:layout_width="35dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/SearchBar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,23 +48,7 @@
         app:layout_constraintStart_toStartOf="@+id/btn_user_profile"
         app:layout_constraintTop_toBottomOf="@+id/btn_user_profile" />
 
-    <EditText
-        android:id="@+id/SearchBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/bg_edittext_rounded"
-        android:ems="10"
-        android:hint="@string/search_main"
-        android:inputType="textPersonName"
-        android:paddingLeft="8dp"
-        android:paddingBottom="2dp"
-        android:paddingRight="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view8"
-        app:layout_constraintEnd_toStartOf="@+id/btn_search"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view8" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_main_activity"
@@ -120,9 +104,28 @@
         android:id="@+id/view8"
         android:layout_width="411dp"
         android:layout_height="58dp"
+        android:background="@color/darker_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/SearchBar"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/bg_edittext_rounded"
+        android:ems="10"
+        android:hint="@string/search_main"
+        android:inputType="textPersonName"
+        android:paddingLeft="8dp"
+        android:paddingBottom="2dp"
+        android:paddingRight="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view8"
+        app:layout_constraintEnd_toStartOf="@+id/btn_search"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view8" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_notification"
@@ -152,6 +155,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/btn_search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/btn_search"
-        app:layout_constraintTop_toTopOf="@+id/btn_search" />
+        app:layout_constraintTop_toTopOf="@+id/btn_search"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,8 +8,11 @@
 
     <Button
         android:id="@+id/btn_interest_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@mipmap/temp_back_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,16 +23,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_interest_title" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_interest_back" />
 
     <TextView
         android:id="@+id/txt_interest_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/interest_title"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_interest_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_interest_back" />
+        app:layout_constraintTop_toTopOf="parent" />
     <ProgressBar
         android:id="@+id/progress_interest_screen"
         style="?android:attr/progressBarStyle"

@@ -25,11 +25,13 @@
     <string name="register">Register</string>
     <string name="register_name">Name</string>
     <string name="register_username">Username</string>
+    <string name="register_delete">Delete</string>
     <string name="contacts">Contacts</string>
     <string name="logout">Logout</string>
     <string name="add_projects_Description">Description</string>
     <string name="add_projects_add">Add project</string>
     <string name="add_projects_add_category">Selecione uma categoria</string>
+    <string name="add_project_need">Do que o projeto precisa?</string>
 
     <!--Errors-->
     <string name="error_register_loading">Calma tá carregando mano</string>
@@ -37,6 +39,8 @@
     <string name="error_register_add_user">Erro ao adicionar usuario</string>
     <string name="users">users</string>
     <string name="projects">projects</string>
+
+    <string name="add"> + </string>
 
     <!--styles for projects-->
     <string name="search_users_name">By Name</string>

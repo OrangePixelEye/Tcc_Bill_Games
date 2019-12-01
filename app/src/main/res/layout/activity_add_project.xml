@@ -14,6 +14,7 @@
             android:layout_height="wrap_content">
     <Button
         android:id="@+id/btn_create_project"
+        android:background="@drawable/bg_button_rounded"
         android:layout_width="302dp"
         android:layout_height="49dp"
         android:layout_marginStart="8dp"
@@ -85,24 +86,27 @@
         android:id="@+id/btn_add_project_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@mipmap/temp_add_image_icon_foreground"
         app:layout_constraintBottom_toBottomOf="@+id/imgAddProject"
         app:layout_constraintEnd_toEndOf="@+id/imgAddProject"
         app:layout_constraintStart_toStartOf="@+id/imgAddProject"
         app:layout_constraintTop_toTopOf="@+id/imgAddProject" />
 
-    <Button
-        android:id="@+id/btn_add_project_back"
-        android:layout_width="67dp"
-        android:layout_height="42dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/btn_add_project_back"
+                android:layout_width="65dp"
+                android:layout_height="50dp"
+                android:background="@mipmap/temp_back_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_delete_project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="@string/register_delete"
         app:layout_constraintBottom_toBottomOf="@+id/btn_create_project"
+        android:background="@drawable/bg_button_rounded"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btn_create_project" />
@@ -121,10 +125,21 @@
 
             <Button
                 android:id="@+id/btn_add_project_need"
+                android:background="@drawable/bg_button_rounded"
                 android:layout_width="70dp"
                 android:layout_height="49dp"
+                android:text="@string/add"
                 app:layout_constraintBottom_toBottomOf="@+id/rv_add_project"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etProjectsDescription" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_project_need"
+                app:layout_constraintEnd_toEndOf="@+id/etProjectsDescription"
+                app:layout_constraintStart_toStartOf="@+id/etProjectsDescription"
                 app:layout_constraintTop_toBottomOf="@+id/etProjectsDescription" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
