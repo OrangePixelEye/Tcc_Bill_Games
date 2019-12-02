@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
     //Some variables that i will use
     private List<String> areaM,lineM;
     private Boolean is_ok;
-    private Boolean is_updating;
+    private Boolean is_updating = false;
     private Boolean is_selected = false;
     private Boolean is_new_photo = false;
 
